@@ -12,7 +12,7 @@ body {
     max-width: 1240px;
 }
 
-.search-bar{
+.search-bar {
     position: relative;
 }
 
@@ -26,7 +26,9 @@ body {
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration { display: none; }
+input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+}
 
 #search::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
@@ -48,14 +50,51 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     opacity: 25%;
 }
 
+/* .filter-buttons {
+    display: flex;
+} */
+
+
+.filter-button {
+    width: 170px;
+    height: 69px;
+    color: white;
+    border: none;
+    text-align: left;
+    border-radius: 5px;
+    position: relative;
+    padding-left: 18px;
+    cursor: pointer;
+}
+
+.filter-button i {
+    position: absolute;
+    top: 38%;
+    right: 18px;
+}
+
+.filter-button-ingredients {
+    background-color: #3282F7;
+}
+
+.filter-button-appliances {
+    background-color: #68D9A4;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.filter-button-utensils {
+    background-color: #ED6454;
+}
+
 .search-icon {
     position: absolute;
     right: 18px;
-    top:50%;
+    top: 50%;
 }
 
 .recipes-section {
-    display:grid;
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     row-gap: 50px;
     column-gap: 50px;
@@ -63,13 +102,13 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     padding-bottom: 25px;
 }
 
-@media screen and (max-width:992px){
+@media screen and (max-width:992px) {
     .recipes-section {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media screen and (max-width:576px){
+@media screen and (max-width:576px) {
     .recipes-section {
         grid-template-columns: 1fr;
     }
@@ -88,7 +127,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 .card-body-left {
-width: 50%;
+    width: 50%;
 }
 
 .card-body-right {
@@ -96,17 +135,17 @@ width: 50%;
 }
 
 .card-title {
-    margin:0;
+    margin: 0;
     font-size: 18px;
     font-weight: 400;
-  line-height: 1.5;
-  width: 65%;
+    line-height: 1.5;
+    width: 65%;
 }
 
 .card-time {
     display: flex;
-justify-content: flex-end;
-width: 35%;
+    justify-content: flex-end;
+    width: 35%;
 }
 
 .card-time-value {
@@ -122,14 +161,14 @@ width: 35%;
 
 .card-body {
     background-color: #E7E7E7;
-    
+
 }
 
 .card-body-top {
     display: flex;
     justify-content: space-between;
     padding-bottom: 20px;
-   
+
 }
 
 .card-main-text {
@@ -155,8 +194,6 @@ width: 35%;
 .card-ingredients p {
     margin: 0;
 }
-
-
 
 .card-instructions {
     font-family: roboto;
