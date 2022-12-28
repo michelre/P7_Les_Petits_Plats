@@ -20,6 +20,11 @@ body {
     border-radius: 5px;
 }
 
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+
 #search::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
     opacity: 25%;
@@ -114,7 +119,7 @@ width: 50%;
     line-height: 14.4px;
 }
 
-.card-text span {
+.ingredient {
     font-weight: 700;
 }
 
@@ -142,6 +147,7 @@ justify-content: flex-end;
 .card-instructions {
     font-family: roboto;
     font-size: 12px;
+    line-height: 12px;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
