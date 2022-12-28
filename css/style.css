@@ -17,7 +17,6 @@ body {
 }
 
 #search {
-
     height: 69px;
     border-color: white;
     background-color: #E7E7E7;
@@ -64,7 +63,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     padding-bottom: 25px;
 }
 
-@media screen and (max-width:768px){
+@media screen and (max-width:992px){
     .recipes-section {
         grid-template-columns: 1fr 1fr;
     }
@@ -146,6 +145,7 @@ width: 35%;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 5;
     overflow: hidden;
+    padding-right: 12px;
 }
 
 .ingredient {
