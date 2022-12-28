@@ -45,3 +45,106 @@ body {
     right: 18px;
     top:50%;
 }
+
+.recipes-section {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 50px;
+    column-gap: 50px;
+}
+
+@media screen and (max-width:768px){
+    .recipes-section {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width:576px){
+    .recipes-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card img {
+    height: 178px;
+}
+
+.card {
+    border-color: white;
+    max-height: 364px;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.card-body-left {
+width: 50%;
+}
+
+.card-body-right {
+    width: 50%;
+}
+
+.card-title {
+    margin:0;
+    font-size: 18px;
+    font-weight: 400;
+  line-height: 1.5;
+}
+
+.card-body {
+    background-color: #E7E7E7;
+    
+}
+
+.card-body-top {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+   
+}
+
+.card-main-text {
+    display: flex;
+}
+
+.card-ingredients {
+    margin: 0;
+    font-size: 12px;
+    line-height: 14.4px;
+}
+
+.card-text span {
+    font-weight: 700;
+}
+
+.card-ingredients p {
+    margin: 0;
+}
+
+.card-time {
+    display: flex;
+justify-content: flex-end;
+
+}
+
+.card-time-value {
+    margin: 0;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.card-time i {
+    padding-right: 7px;
+    align-self: center;
+}
+
+.card-instructions {
+    font-family: roboto;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    overflow: hidden;
+}
