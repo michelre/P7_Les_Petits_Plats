@@ -8,6 +8,10 @@ body {
     font-size: 18px;
 }
 
+.container {
+    max-width: 1240px;
+}
+
 .search-bar{
     position: relative;
 }
@@ -56,6 +60,8 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     grid-template-columns: 1fr 1fr 1fr;
     row-gap: 50px;
     column-gap: 50px;
+    padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 @media screen and (max-width:768px){
@@ -75,7 +81,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 .card {
-    border-color: white;
+    border: none;
     max-height: 364px;
     border-radius: 5px;
     overflow: hidden;
@@ -95,6 +101,24 @@ width: 50%;
     font-size: 18px;
     font-weight: 400;
   line-height: 1.5;
+  width: 65%;
+}
+
+.card-time {
+    display: flex;
+justify-content: flex-end;
+width: 35%;
+}
+
+.card-time-value {
+    margin: 0;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.card-time i {
+    padding-right: 7px;
+    padding-top: 4px;
 }
 
 .card-body {
@@ -117,6 +141,11 @@ width: 50%;
     margin: 0;
     font-size: 12px;
     line-height: 14.4px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
 }
 
 .ingredient {
@@ -127,22 +156,7 @@ width: 50%;
     margin: 0;
 }
 
-.card-time {
-    display: flex;
-justify-content: flex-end;
 
-}
-
-.card-time-value {
-    margin: 0;
-    font-weight: 400;
-    font-size: 18px;
-}
-
-.card-time i {
-    padding-right: 7px;
-    align-self: center;
-}
 
 .card-instructions {
     font-family: roboto;
