@@ -52,6 +52,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .filter-buttons {
     display: flex;
+  margin-top: 20px;
 }
 
 
@@ -75,7 +76,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .filter-button-ingredients {
     background-color: #3282F7;
-    
+
 }
 
 .filter-button-appliances {
@@ -89,7 +90,6 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .search-by-tag-dropdown {
-    background-color: #3282F7;
     color: white;
     position: relative;
     border-radius: 5px;
@@ -98,14 +98,42 @@ input[type="search"]::-webkit-search-results-decoration {
     /* max-width: 667px; */
 }
 
-.search-by-tag-bar {
+.ingredients-dropdown {
     background-color: #3282F7;
+    display: none;
+}
+
+.appliances-dropdown {
+    background-color: #68D9A4;
+    display: none;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+.ustensils-dropdown {
+    background-color: #ED6454;
+    display: none;
+}
+
+.search-by-tag-bar {
     color: white;
     height: 69px;
     border: none;
     padding-left: 18px;
     width: 100%;
     font-weight: 700;
+}
+
+.ingredient-search-bar {
+    background-color: #3282F7;
+}
+
+.appliance-search-bar {
+    background-color: #68D9A4;
+}
+
+.ustensil-search-bar {
+    background-color: #ED6454;
 }
 
 .search-by-tag-bar:focus {
@@ -163,14 +191,18 @@ input[type="search"]::-webkit-search-results-decoration {
     display: inline-block;
     width: fit-content;
     padding-top: 4px;
-   white-space: nowrap;
-}
-
-.ingredients-dropdown {
-    display: none;
+    white-space: nowrap;
 }
 
 .ingredients-dropdown i {
+    cursor: pointer;
+}
+
+.ustensils-dropdown i {
+    cursor: pointer;
+}
+
+.appliances-dropdown i {
     cursor: pointer;
 }
 

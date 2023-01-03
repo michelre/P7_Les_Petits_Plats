@@ -1,4 +1,4 @@
-import {getRecipes} from "../utils/getData.js";
+import { getRecipes } from "../utils/getData.js";
 import RecipeCards from "../factories/recipeCards.js";
 import IngredientList from "../factories/ingredientLists.js";
 import ApplianceList from "../factories/applianceLists.js";
@@ -17,11 +17,11 @@ const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
 //Initialise recipe cards
 async function initCards() {
    const recipes = await getRecipes();
-   
-const cards = new RecipeCards(recipes);
-const mainSection = document.querySelector("main");
-mainSection.appendChild(cards.renderCards());
- 
+
+   const cards = new RecipeCards(recipes);
+   const mainSection = document.querySelector("main");
+   mainSection.appendChild(cards.renderCards());
+
 }
 
 initCards();
@@ -95,5 +95,16 @@ function toggleUstensils() {
    }
 }
 
+// function closeUstensils(event) {
+//    if (event.target.parentNode != ustensilsDropdown && event.target.parentNode.parentNode != ustensilsDropdown && ustensilsDropdown.style.display == "block") {
+//       ustensilsDropdown.style.display = "none";
+//       ustensilsButton.style.display = "block";
+//       console.log(event.target);
+//    }
+// }
+
 ustensilsButton.addEventListener("click", toggleUstensils);
 ustensilsDropdownClose.addEventListener("click", toggleUstensils);
+
+// //click ouside ustensil dropdown list closes it
+// document.addEventListener("click", closeUstensils);
