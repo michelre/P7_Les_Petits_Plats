@@ -75,6 +75,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .filter-button-ingredients {
     background-color: #3282F7;
+    
 }
 
 .filter-button-appliances {
@@ -83,7 +84,7 @@ input[type="search"]::-webkit-search-results-decoration {
     margin-right: 20px;
 }
 
-.filter-button-utensils {
+.filter-button-ustensils {
     background-color: #ED6454;
 }
 
@@ -93,8 +94,8 @@ input[type="search"]::-webkit-search-results-decoration {
     position: relative;
     border-radius: 5px;
     overflow: hidden;
-    width: 125vw;
-    max-width: 667px;
+    /* width: 125vw; */
+    /* max-width: 667px; */
 }
 
 .search-by-tag-bar {
@@ -162,6 +163,15 @@ input[type="search"]::-webkit-search-results-decoration {
     display: inline-block;
     width: fit-content;
     padding-top: 4px;
+   white-space: nowrap;
+}
+
+.ingredients-dropdown {
+    display: none;
+}
+
+.ingredients-dropdown i {
+    cursor: pointer;
 }
 
 .search-icon {
