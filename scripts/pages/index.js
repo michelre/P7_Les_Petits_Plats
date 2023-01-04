@@ -30,7 +30,14 @@ initCards();
 
 async function initIngredientList() {
    const recipes = await getRecipes();
-   const ingredientList = new IngredientList(recipes);
+   let ingredients = [];
+   for (let i = 0; i < recipes.length; i++) {
+      for (let j = 0; j < recipes[i].ingredients.length; j++) {
+         ingredients.push(recipes[i].ingredients[j].ingredient);
+      }
+   }
+   ingredients = Array.from(new Set(ingredients));
+   const ingredientList = new IngredientList(ingredients);
    ingredientsDropdown.appendChild(ingredientList.renderList());
 }
 
@@ -54,7 +61,9 @@ ingredientsDropdownClose.addEventListener("click", toggleIngredients);
 
 async function initApplianceList() {
    const recipes = await getRecipes();
-   const applianceList = new ApplianceList(recipes);
+   let appliances = recipes.map(recipe => recipe.appliance);
+   appliances = Array.from(new Set(appliances));
+   const applianceList = new ApplianceList(appliances);
    appliancesDropdown.appendChild(applianceList.renderList());
 }
 
@@ -78,7 +87,15 @@ appliancesDropdownClose.addEventListener("click", toggleAppliances);
 
 async function initUstensilList() {
    const recipes = await getRecipes();
-   const ustensilList = new UstensilList(recipes);
+let ustensils = [];
+for (let i = 0; i < recipes.length; i++) {
+   for (let j = 0; j < recipes[i].ustensils.length; j++) {
+      ustensils.push(recipes[i].ustensils[j]);
+   }
+}
+ustensils = Array.from(new Set(ustensils));
+console.log(ustensils);
+   const ustensilList = new UstensilList(ustensils);
    ustensilsDropdown.appendChild(ustensilList.renderList());
 }
 
@@ -95,16 +112,5 @@ function toggleUstensils() {
    }
 }
 
-// function closeUstensils(event) {
-//    if (event.target.parentNode != ustensilsDropdown && event.target.parentNode.parentNode != ustensilsDropdown && ustensilsDropdown.style.display == "block") {
-//       ustensilsDropdown.style.display = "none";
-//       ustensilsButton.style.display = "block";
-//       console.log(event.target);
-//    }
-// }
-
 ustensilsButton.addEventListener("click", toggleUstensils);
 ustensilsDropdownClose.addEventListener("click", toggleUstensils);
-
-// //click ouside ustensil dropdown list closes it
-// document.addEventListener("click", closeUstensils);

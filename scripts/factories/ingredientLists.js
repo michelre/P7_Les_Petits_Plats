@@ -1,6 +1,6 @@
 class IngredientList {
-    constructor(recipes) {
-        this.recipes = recipes;
+    constructor(ingredients) {
+        this.ingredients = ingredients;
     }
 
     renderList() {
@@ -9,14 +9,12 @@ class IngredientList {
         ingredientsList.classList.add("tag-list");
         ingredientsList.classList.add("ingredients-list");
 
-        for (let i = 0; i < this.recipes.length; i++) {
-
-            for (let j = 0; j < this.recipes[i].ingredients.length; j++) {
+        for (let i = 0; i < this.ingredients.length; i++) {
+          console.log("test");
                 const ingredientListItem = document.createElement("li");
-                ingredientListItem.textContent = this.recipes[i].ingredients[j].ingredient;
+                ingredientListItem.textContent = this.ingredients[i];
                 ingredientsList.appendChild(ingredientListItem);
-            }
-
+                
         }
 
         return ingredientsList;

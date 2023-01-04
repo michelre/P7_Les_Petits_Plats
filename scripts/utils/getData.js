@@ -8,9 +8,7 @@ function getRecipes() {
             } throw new Error('Request failed!');
         }, networkError => { console.log(networkError.message) }
         )
-        .then((jsonResponse) => {
-            return jsonResponse.recipes;
-        })
+        .then((jsonResponse) => jsonResponse.recipes)
         .catch(error => {
             console.log(error);
         });

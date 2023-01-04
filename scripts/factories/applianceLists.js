@@ -1,6 +1,6 @@
 class ApplianceList {
-    constructor(recipes) {
-        this.recipes = recipes;
+    constructor(appliances) {
+        this.appliances = appliances;
     }
 
     renderList() {
@@ -9,10 +9,10 @@ class ApplianceList {
         appliancesList.classList.add("tag-list");
         appliancesList.classList.add("appliances-list");
 
-        for (let i = 0; i < this.recipes.length; i++) {
+        for (let i = 0; i < this.appliances.length; i++) {
            
                 const applianceListItem = document.createElement("li");
-                applianceListItem.textContent = this.recipes[i].appliance;
+                applianceListItem.textContent = this.appliances[i];
                 appliancesList.appendChild(applianceListItem);     
 
         }
