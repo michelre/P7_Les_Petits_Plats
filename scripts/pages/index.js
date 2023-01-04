@@ -17,7 +17,6 @@ const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
 //Initialise recipe cards
 async function initCards() {
    const recipes = await getRecipes();
-
    const cards = new RecipeCards(recipes);
    const mainSection = document.querySelector("main");
    mainSection.appendChild(cards.renderCards());
@@ -94,7 +93,6 @@ for (let i = 0; i < recipes.length; i++) {
    }
 }
 ustensils = Array.from(new Set(ustensils));
-console.log(ustensils);
    const ustensilList = new UstensilList(ustensils);
    ustensilsDropdown.appendChild(ustensilList.renderList());
 }

@@ -50,12 +50,42 @@ input[type="search"]::-webkit-search-results-decoration {
     opacity: 25%;
 }
 
+.active-tags {
+    display: flex;
+}
+
+.tag-button {
+    height: 37px;
+    color: white;
+    margin-right: 18px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-top: 25px;
+}
+
+.tag-button-text{
+    margin: 0;
+    padding-right: 13px;
+}
+
+.ingredient-tag {
+    background-color: #3282F7;
+}
+
+.appliance-tag{
+    background-color: #68D9A4;
+}
+
+.ustensil-tag {
+    background-color: #ED6454;
+}
+
 .filter-buttons {
     display: flex;
   margin-top: 20px;
 }
-
-
 
 .filter-button {
     width: 170px;

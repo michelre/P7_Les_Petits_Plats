@@ -10,7 +10,6 @@ class IngredientList {
         ingredientsList.classList.add("ingredients-list");
 
         for (let i = 0; i < this.ingredients.length; i++) {
-          console.log("test");
                 const ingredientListItem = document.createElement("li");
                 ingredientListItem.textContent = this.ingredients[i];
                 ingredientsList.appendChild(ingredientListItem);
