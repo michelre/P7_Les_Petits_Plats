@@ -52,6 +52,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .active-tags {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .tag-button {
@@ -68,6 +69,10 @@ input[type="search"]::-webkit-search-results-decoration {
 .tag-button-text{
     margin: 0;
     padding-right: 13px;
+}
+
+.tag-button i{
+cursor: pointer;
 }
 
 .ingredient-tag {

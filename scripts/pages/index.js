@@ -13,6 +13,8 @@ const appliancesDropdownClose = document.querySelector(".appliances-dropdown i")
 const ustensilsDropdown = document.querySelector(".ustensils-dropdown");
 const ustensilsButton = document.querySelector(".filter-button-ustensils");
 const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
+const activeTags = document.querySelector(".active-tags");
+
 
 //Initialise recipe cards
 async function initCards() {
