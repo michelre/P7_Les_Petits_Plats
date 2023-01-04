@@ -56,6 +56,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 
+
 .filter-button {
     width: 170px;
     height: 69px;
@@ -211,6 +212,36 @@ input[type="search"]::-webkit-search-results-decoration {
     right: 18px;
     top: 50%;
     font-weight: 700;
+}
+
+@media screen and (max-width:992px) {
+
+    .filter-buttons {
+        flex-direction: column;
+    }
+
+    .filter-button-appliances {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 18px;
+        margin-bottom: 18px;
+    }
+
+.filter-button {
+width: 100%;
+}
+
+.appliances-dropdown {
+    margin-left: 0;
+        margin-right: 0;
+        margin-top: 18px;
+        margin-bottom: 18px;
+}
+
+.tag-list{
+    grid-template-columns: 1fr;
+}
+
 }
 
 .recipes-section {
