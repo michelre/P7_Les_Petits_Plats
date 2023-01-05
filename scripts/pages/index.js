@@ -13,16 +13,15 @@ const appliancesDropdownClose = document.querySelector(".appliances-dropdown i")
 const ustensilsDropdown = document.querySelector(".ustensils-dropdown");
 const ustensilsButton = document.querySelector(".filter-button-ustensils");
 const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
-const activeTags = document.querySelector(".active-tags");
-
+const mainSection = document.querySelector("main");
+let recipes = [];
+let filteredRecipes = [];
 
 //Initialise recipe cards
 async function initCards() {
-   const recipes = await getRecipes();
+   recipes = await getRecipes();
    const cards = new RecipeCards(recipes);
-   const mainSection = document.querySelector("main");
    mainSection.appendChild(cards.renderCards());
-
 }
 
 initCards();
@@ -30,7 +29,7 @@ initCards();
 //Initialise ingredients list
 
 async function initIngredientList() {
-   const recipes = await getRecipes();
+   recipes = await getRecipes();
    let ingredients = [];
    for (let i = 0; i < recipes.length; i++) {
       for (let j = 0; j < recipes[i].ingredients.length; j++) {
@@ -61,9 +60,10 @@ ingredientsDropdownClose.addEventListener("click", toggleIngredients);
 //Initialise appliances list
 
 async function initApplianceList() {
-   const recipes = await getRecipes();
+   recipes = await getRecipes();
    let appliances = recipes.map(recipe => recipe.appliance);
    appliances = Array.from(new Set(appliances));
+
    const applianceList = new ApplianceList(appliances);
    appliancesDropdown.appendChild(applianceList.renderList());
 }
@@ -87,14 +87,24 @@ appliancesDropdownClose.addEventListener("click", toggleAppliances);
 //Initialise ustensils list
 
 async function initUstensilList() {
-   const recipes = await getRecipes();
-let ustensils = [];
-for (let i = 0; i < recipes.length; i++) {
-   for (let j = 0; j < recipes[i].ustensils.length; j++) {
-      ustensils.push(recipes[i].ustensils[j]);
+   recipes = await getRecipes();
+   let ustensils = [];
+   for (let i = 0; i < recipes.length; i++) {
+      for (let j = 0; j < recipes[i].ustensils.length; j++) {
+         ustensils.push(recipes[i].ustensils[j]);
+      }
    }
-}
-ustensils = Array.from(new Set(ustensils));
+   ustensils = Array.from(new Set(ustensils));
+   //Capitalize first Letter
+   ustensils = ustensils.map(word => {
+      const firstLetter = word.charAt(0).toUpperCase();
+      const rest = word.slice(1).toLowerCase();
+      return firstLetter + rest;
+   });
+   //Remove numbers
+   ustensils = ustensils.map(word => word.replace(/[0-9]/g, ''));
+   //Remove brackets
+   ustensils = ustensils.map(word => word.replace(/[{()}]/g, ''));
    const ustensilList = new UstensilList(ustensils);
    ustensilsDropdown.appendChild(ustensilList.renderList());
 }
@@ -114,3 +124,89 @@ function toggleUstensils() {
 
 ustensilsButton.addEventListener("click", toggleUstensils);
 ustensilsDropdownClose.addEventListener("click", toggleUstensils);
+
+
+//Remove accents and decapitalise
+function normalize(string) {
+   return string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+//Main search bar
+
+//Main search bar error message
+function displaySearchError() {
+   document.querySelector(".search-error-message").style.display = "block";
+}
+
+function hideSearchError() {
+   document.querySelector(".search-error-message").style.display = "none";
+}
+
+function mainSearch(recipesArray, userInput) {
+   //create array with matching titles
+   const nameMatchArray = recipesArray.filter(recipe => normalize(recipe.name).includes(userInput));
+
+   //create array with maching description
+   const descriptionMatchArray = recipesArray.filter(recipe => normalize(recipe.description).includes(userInput));
+
+   //create array with maching ingredients
+   const ingredientsMatchArray = [];
+   recipesArray.forEach((recipe) => {
+      recipe.ingredients.forEach(obj => {
+         if (normalize(obj.ingredient).includes(userInput)) {
+            ingredientsMatchArray.push(recipe);
+         }
+      })
+   })
+
+   //create single array from above ones
+   const mainSearchArray = [...nameMatchArray, ...descriptionMatchArray, ...ingredientsMatchArray];
+   //Removes duplicates and return array
+   return Array.from(new Set(mainSearchArray));
+}
+
+//Main search bar event listener
+const mainSearchInput = document.getElementById("search");
+let mainSearchUserinput;
+mainSearchInput.addEventListener("input", e => {
+   mainSearchUserinput = normalize(e.target.value);
+   if (mainSearchUserinput.length > 2) {
+      filteredRecipes = mainSearch(recipes, mainSearchUserinput);
+
+      if (filteredRecipes.length == 0) {
+         displaySearchError();
+      } else {
+         hideSearchError();
+      }
+
+      let filteredCards = new RecipeCards(filteredRecipes);
+      document.querySelector(".recipes-section").remove();
+      mainSection.appendChild(filteredCards.renderCards());
+   }
+   if (mainSearchUserinput.length <= 2) {
+      document.querySelector(".recipes-section").remove();
+      initCards();
+   }
+})
+
+
+//Ingredient search bar
+const ingredientSearchInput = document.querySelector(".ingredient-search-bar");
+ingredientSearchInput.addEventListener("input", e => {
+   const userInput = e.target.value;
+   console.log(userInput);
+})
+
+//Appliance search bar
+const applianceSearchInput = document.querySelector(".appliance-search-bar");
+applianceSearchInput.addEventListener("input", e => {
+   const userInput = e.target.value;
+   console.log(userInput);
+})
+
+//Ustensils search bar
+const ustensilSearchInput = document.querySelector(".ustensil-search-bar");
+ustensilSearchInput.addEventListener("input", e => {
+   const userInput = e.target.value;
+   console.log(userInput);
+})

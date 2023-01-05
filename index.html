@@ -31,24 +31,14 @@
     <main class="container">
         <nav class="search-section pt-2">
 
-            <form action="" class="search-bar">
+            <form class="search-bar">
                 <input type="search" class="form-control" id="search" placeholder="Rechercher une recette">
                 <i class="fa-solid fa-magnifying-glass fa-lg search-icon"></i>
+                
             </form>
+            <p class="search-error-message">Aucune recette ne correspond à votre critère... vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>
 
             <div class="active-tags">
-                <!-- <div class="tag-button ingredient-tag">
-                    <p class="tag-button-text">Tomate</p>
-                    <i class="fa-regular fa-circle-xmark"></i>
-                </div>
-                <div class="tag-button appliance-tag">
-                    <p class="tag-button-text">Tomate</p>
-                    <i class="fa-regular fa-circle-xmark"></i>
-                </div>
-                <div class="tag-button ustensil-tag">
-                    <p class="tag-button-text">Tomate</p>
-                    <i class="fa-regular fa-circle-xmark tag-button-close"></i>
-                </div> -->
             </div>
 
             <div class="filter-buttons pt-2">
@@ -59,7 +49,7 @@
                 <div class="search-by-tag-dropdown ingredients-dropdown">
                     <input type="search" class="search-by-tag-bar  ingredient-search-bar"
                         placeholder="Rechercher un ingrédient">
-                    <i class="fa-solid fa-chevron-up search-by-tag-bar-icon"></i>
+                    <i class="fa-solid fa-chevron-up search-by-tag-bar-icon"></i>  
                 </div>
 
                 <button class="filter-button filter-button-appliances">Appareils<i

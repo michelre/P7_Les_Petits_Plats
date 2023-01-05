@@ -50,6 +50,14 @@ input[type="search"]::-webkit-search-results-decoration {
     opacity: 25%;
 }
 
+.search-error-message{
+    display: none;
+    color: red;
+    font-size: 12px;
+    margin: 0;
+    padding-top: 6px;
+}
+
 .active-tags {
     display: flex;
     flex-wrap: wrap;
