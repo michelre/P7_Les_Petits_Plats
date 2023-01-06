@@ -23,6 +23,11 @@ let filteredAppliances = [];
 let ustensils = [];
 let filteredUstensils = [];
 
+//Decapitalise all letters except first
+function titleCase(string) {
+   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+ }
+
 //Initialise recipe cards
 async function initCards() {
    recipes = await getRecipes();
@@ -33,7 +38,6 @@ async function initCards() {
 initCards();
 
 //Initialise ingredients list
-
 async function initIngredientList() {
    recipes = await getRecipes();
    for (let i = 0; i < recipes.length; i++) {
@@ -41,6 +45,7 @@ async function initIngredientList() {
          ingredients.push(recipes[i].ingredients[j].ingredient);
       }
    }
+   ingredients = ingredients.map(ingredient => titleCase(ingredient));
    ingredients = Array.from(new Set(ingredients));
    const ingredientList = new IngredientList(ingredients);
    ingredientsDropdown.appendChild(ingredientList.renderList());
@@ -193,7 +198,7 @@ function mainSearchAlgo(mainSearchUserinput) {
              filteredIngredients.push(obj.ingredient);
           })
        })
-   
+       filteredIngredients = filteredIngredients.map(ingredient => titleCase(ingredient));
        filteredIngredients = Array.from(new Set(filteredIngredients));
    
        if (document.querySelector(".ingredients-list")) {
@@ -267,6 +272,11 @@ const ingredientSearchInput = document.querySelector(".ingredient-search-bar");
 let ingredientSearchUserinput;
 ingredientSearchInput.addEventListener("input", e => {
    ingredientSearchUserinput = normalize(e.target.value);
+
+tagFilteredIngredients = ingredients.filter(ingredient => normalize(ingredient).includes(ingredientSearchUserinput));
+tagFilteredIngredients = Array.from(new Set(tagFilteredIngredients));
+
+console.log(tagFilteredIngredients);
 
    if(document.querySelector(".ingredients-list")){
    document.querySelector(".ingredients-list").remove();
