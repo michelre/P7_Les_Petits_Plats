@@ -30,10 +30,17 @@ class ApplianceList {
             tagButtonClose.classList.add("tag-button-close");
             tagButton.appendChild(tagButtonClose);
 
+
             function displayTag() {
                 activeTags.appendChild(tagButton);
             }
 
+            //Tag list item event listener
+            applianceListItem.addEventListener("click", (e) => {
+                console.log(e.target.textContent);
+            })
+
+            //Close button event listener
             tagButtonClose.addEventListener("click", (e) => e.target.parentNode.remove());
 
             applianceListItem.addEventListener("click", displayTag);
