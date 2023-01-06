@@ -16,6 +16,12 @@ const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
 const mainSection = document.querySelector("main");
 let recipes = [];
 let filteredRecipes = [];
+let ingredients = [];
+let filteredIngredients = [];
+let appliances = [];
+let filteredAppliances = [];
+let ustensils = [];
+let filteredUstensils = [];
 
 //Initialise recipe cards
 async function initCards() {
@@ -30,7 +36,6 @@ initCards();
 
 async function initIngredientList() {
    recipes = await getRecipes();
-   let ingredients = [];
    for (let i = 0; i < recipes.length; i++) {
       for (let j = 0; j < recipes[i].ingredients.length; j++) {
          ingredients.push(recipes[i].ingredients[j].ingredient);
@@ -58,10 +63,9 @@ ingredientsButton.addEventListener("click", toggleIngredients);
 ingredientsDropdownClose.addEventListener("click", toggleIngredients);
 
 //Initialise appliances list
-
 async function initApplianceList() {
    recipes = await getRecipes();
-   let appliances = recipes.map(recipe => recipe.appliance);
+   appliances = recipes.map(recipe => recipe.appliance);
    appliances = Array.from(new Set(appliances));
 
    const applianceList = new ApplianceList(appliances);
@@ -85,10 +89,8 @@ appliancesButton.addEventListener("click", toggleAppliances);
 appliancesDropdownClose.addEventListener("click", toggleAppliances);
 
 //Initialise ustensils list
-
 async function initUstensilList() {
    recipes = await getRecipes();
-   let ustensils = [];
    for (let i = 0; i < recipes.length; i++) {
       for (let j = 0; j < recipes[i].ustensils.length; j++) {
          ustensils.push(recipes[i].ustensils[j]);
@@ -131,7 +133,7 @@ function normalize(string) {
    return string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-//Main search bar
+//---------------Main search bar----------------------------
 
 //Main search bar error message
 function displaySearchError() {
@@ -179,13 +181,76 @@ mainSearchInput.addEventListener("input", e => {
          hideSearchError();
       }
 
+      //Initialise filtered recipe cards
       let filteredCards = new RecipeCards(filteredRecipes);
-      document.querySelector(".recipes-section").remove();
+      if (document.querySelector(".recipes-section")) {
+         document.querySelector(".recipes-section").remove();
+      }
+
       mainSection.appendChild(filteredCards.renderCards());
+
+      //Initialise filtered ingredients tag list
+      filteredIngredients = [];
+      filteredRecipes.forEach((recipe) => {
+         recipe.ingredients.forEach(obj => {
+            filteredIngredients.push(obj.ingredient);
+         })
+      })
+
+      filteredIngredients = Array.from(new Set(filteredIngredients));
+
+      if (document.querySelector(".ingredients-list")) {
+         document.querySelector(".ingredients-list").remove();
+      }
+      const ingredientList = new IngredientList(filteredIngredients);
+      ingredientsDropdown.appendChild(ingredientList.renderList());
+
+      //Initialise filtered appliances list
+      filteredAppliances = [];
+      filteredAppliances = filteredRecipes.map(recipe => recipe.appliance);
+      filteredAppliances = Array.from(new Set(filteredAppliances));
+      if (document.querySelector(".appliances-list")) {
+         document.querySelector(".appliances-list").remove();
+      }
+      let filteredApplianceList = new ApplianceList(filteredAppliances);
+      appliancesDropdown.appendChild(filteredApplianceList.renderList());
+
+      //Initialise filtered ustensils list
+      filteredUstensils = [];
+      filteredRecipes.forEach((recipe) => {
+         recipe.ustensils.forEach((ustensil) => {
+            filteredUstensils.push(ustensil);
+         })
+      })
+
+      filteredUstensils = Array.from(new Set(filteredUstensils));
+      filteredUstensils = filteredUstensils.map(word => {
+         const firstLetter = word.charAt(0).toUpperCase();
+         const rest = word.slice(1).toLowerCase();
+         return firstLetter + rest;
+      });
+      filteredUstensils = filteredUstensils.map(word => word.replace(/[0-9]/g, ''));
+      filteredUstensils = filteredUstensils.map(word => word.replace(/[{()}]/g, ''));
+      const ustensilList = new UstensilList(filteredUstensils);
+      if (document.querySelector(".ustensils-list")) {
+         document.querySelector(".ustensils-list").remove();
+      }
+
+      ustensilsDropdown.appendChild(ustensilList.renderList());
+
    }
+
+
    if (mainSearchUserinput.length <= 2) {
       document.querySelector(".recipes-section").remove();
+      document.querySelector(".ingredients-list").remove();
+      document.querySelector(".appliances-list").remove();
+      document.querySelector(".ustensils-list").remove();
       initCards();
+      initIngredientList();
+      initApplianceList();
+      initUstensilList();
+      hideSearchError();
    }
 })
 
