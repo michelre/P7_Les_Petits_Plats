@@ -16,17 +16,26 @@ const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
 const mainSection = document.querySelector("main");
 let recipes = [];
 let filteredRecipes = [];
+let tagFilteredRecipes = [];
 let ingredients = [];
 let filteredIngredients = [];
 let appliances = [];
 let filteredAppliances = [];
 let ustensils = [];
 let filteredUstensils = [];
+let tagFilteredIngredients = [];
+let tagFilteredAppliances = [];
+let tagFilteredUstensils = [];
 
 //Decapitalise all letters except first
 function titleCase(string) {
    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
- }
+}
+
+//Capitalise first letter and removes numbers + parenthesis for DOM
+function normalizeDOMString(string) {
+   return titleCase(string).replace(/[0-9]/g, '').replace(/[{()}]/g, '');
+}
 
 //Initialise recipe cards
 async function initCards() {
@@ -102,16 +111,7 @@ async function initUstensilList() {
       }
    }
    ustensils = Array.from(new Set(ustensils));
-   //Capitalize first Letter
-   ustensils = ustensils.map(word => {
-      const firstLetter = word.charAt(0).toUpperCase();
-      const rest = word.slice(1).toLowerCase();
-      return firstLetter + rest;
-   });
-   //Remove numbers
-   ustensils = ustensils.map(word => word.replace(/[0-9]/g, ''));
-   //Remove brackets
-   ustensils = ustensils.map(word => word.replace(/[{()}]/g, ''));
+   ustensils = ustensils.map(word => normalizeDOMString(word));
    const ustensilList = new UstensilList(ustensils);
    ustensilsDropdown.appendChild(ustensilList.renderList());
 }
@@ -175,83 +175,76 @@ function mainSearch(recipesArray, userInput) {
 //Main search functional programmation algorithm
 function mainSearchAlgo(mainSearchUserinput) {
    if (mainSearchUserinput.length > 2) {
-       filteredRecipes = mainSearch(recipes, mainSearchUserinput);
-   
-       if (filteredRecipes.length == 0) {
-          displaySearchError();
-       } else {
-          hideSearchError();
-       }
-   
-       //Initialise filtered recipe cards
-       let filteredCards = new RecipeCards(filteredRecipes);
-       if (document.querySelector(".recipes-section")) {
-          document.querySelector(".recipes-section").remove();
-       }
-   
-       mainSection.appendChild(filteredCards.renderCards());
-   
-       //Initialise filtered ingredients tag list
-       filteredIngredients = [];
-       filteredRecipes.forEach((recipe) => {
-          recipe.ingredients.forEach(obj => {
-             filteredIngredients.push(obj.ingredient);
-          })
-       })
-       filteredIngredients = filteredIngredients.map(ingredient => titleCase(ingredient));
-       filteredIngredients = Array.from(new Set(filteredIngredients));
-   
-       if (document.querySelector(".ingredients-list")) {
-          document.querySelector(".ingredients-list").remove();
-       }
-       const ingredientList = new IngredientList(filteredIngredients);
-       ingredientsDropdown.appendChild(ingredientList.renderList());
-   
-       //Initialise filtered appliances list
-       filteredAppliances = [];
-       filteredAppliances = filteredRecipes.map(recipe => recipe.appliance);
-       filteredAppliances = Array.from(new Set(filteredAppliances));
-       if (document.querySelector(".appliances-list")) {
-          document.querySelector(".appliances-list").remove();
-       }
-       let filteredApplianceList = new ApplianceList(filteredAppliances);
-       appliancesDropdown.appendChild(filteredApplianceList.renderList());
-   
-       //Initialise filtered ustensils list
-       filteredUstensils = [];
-       filteredRecipes.forEach((recipe) => {
-          recipe.ustensils.forEach((ustensil) => {
-             filteredUstensils.push(ustensil);
-          })
-       })
-   
-       filteredUstensils = Array.from(new Set(filteredUstensils));
-       filteredUstensils = filteredUstensils.map(word => {
-          const firstLetter = word.charAt(0).toUpperCase();
-          const rest = word.slice(1).toLowerCase();
-          return firstLetter + rest;
-       });
-       filteredUstensils = filteredUstensils.map(word => word.replace(/[0-9]/g, ''));
-       filteredUstensils = filteredUstensils.map(word => word.replace(/[{()}]/g, ''));
-       const ustensilList = new UstensilList(filteredUstensils);
-       if (document.querySelector(".ustensils-list")) {
-          document.querySelector(".ustensils-list").remove();
-       }
-       ustensilsDropdown.appendChild(ustensilList.renderList());
-    }
-   
-    if (mainSearchUserinput.length <= 2) {
-       document.querySelector(".recipes-section").remove();
-       document.querySelector(".ingredients-list").remove();
-       document.querySelector(".appliances-list").remove();
-       document.querySelector(".ustensils-list").remove();
-       initCards();
-       initIngredientList();
-       initApplianceList();
-       initUstensilList();
-       hideSearchError();
-    }
+      filteredRecipes = mainSearch(recipes, mainSearchUserinput);
+
+      if (filteredRecipes.length == 0) {
+         displaySearchError();
+      } else {
+         hideSearchError();
+      }
+
+      //Initialise filtered recipe cards
+      let filteredCards = new RecipeCards(filteredRecipes);
+      if (document.querySelector(".recipes-section")) {
+         document.querySelector(".recipes-section").remove();
+      }
+
+      mainSection.appendChild(filteredCards.renderCards());
+
+      //Initialise filtered ingredients tag list
+      filteredIngredients = [];
+      filteredRecipes.forEach((recipe) => {
+         recipe.ingredients.forEach(obj => {
+            filteredIngredients.push(obj.ingredient);
+         })
+      })
+      filteredIngredients = filteredIngredients.map(ingredient => titleCase(ingredient));
+      filteredIngredients = Array.from(new Set(filteredIngredients));
+
+      if (document.querySelector(".ingredients-list")) {
+         document.querySelector(".ingredients-list").remove();
+      }
+      const ingredientList = new IngredientList(filteredIngredients);
+      ingredientsDropdown.appendChild(ingredientList.renderList());
+
+      //Initialise filtered appliances list
+      filteredAppliances = [];
+      filteredAppliances = filteredRecipes.map(recipe => recipe.appliance);
+      filteredAppliances = Array.from(new Set(filteredAppliances));
+      if (document.querySelector(".appliances-list")) {
+         document.querySelector(".appliances-list").remove();
+      }
+      let filteredApplianceList = new ApplianceList(filteredAppliances);
+      appliancesDropdown.appendChild(filteredApplianceList.renderList());
+
+      //Initialise filtered ustensils list
+      filteredUstensils = [];
+      filteredRecipes.forEach((recipe) => {
+         recipe.ustensils.forEach((ustensil) => {
+            filteredUstensils.push(ustensil);
+         })
+      })
+      filteredUstensils = Array.from(new Set(filteredUstensils));
+      filteredUstensils = filteredUstensils.map(word => normalizeDOMString(word));
+      const ustensilList = new UstensilList(filteredUstensils);
+      if (document.querySelector(".ustensils-list")) {
+         document.querySelector(".ustensils-list").remove();
+      }
+      ustensilsDropdown.appendChild(ustensilList.renderList());
    }
+
+   if (mainSearchUserinput.length <= 2) {
+      document.querySelector(".recipes-section").remove();
+      document.querySelector(".ingredients-list").remove();
+      document.querySelector(".appliances-list").remove();
+      document.querySelector(".ustensils-list").remove();
+      initCards();
+      initIngredientList();
+      initApplianceList();
+      initUstensilList();
+      hideSearchError();
+   }
+}
 
 //Main search bar event listener
 const mainSearchInput = document.getElementById("search");
@@ -259,50 +252,99 @@ let mainSearchUserinput;
 mainSearchInput.addEventListener("input", e => {
    mainSearchUserinput = normalize(e.target.value);
    mainSearchAlgo(mainSearchUserinput);
-   
+
 })
 
+//Update ingredients list by tags
+function updateIngredientsByTags(ingredientSearchUserinput) {
+   //Create new filtered by tag ingredient array
+   tagFilteredIngredients = ingredients.filter(ingredient => normalize(ingredient).includes(ingredientSearchUserinput));
+   tagFilteredIngredients = tagFilteredIngredients.map(ingredient => titleCase(ingredient));
+   tagFilteredIngredients = Array.from(new Set(tagFilteredIngredients));
 
-let tagFilteredIngredients = [];
-let tagFilteredRecipes = [];
+   //Initialise ingredient list filtered by tag
+   if (document.querySelector(".ingredients-list")) {
+      document.querySelector(".ingredients-list").remove();
+   }
+   let filteredByTagingredientList = new IngredientList(tagFilteredIngredients);
+   ingredientsDropdown.appendChild(filteredByTagingredientList.renderList());
 
+   //Re-Initialise ingredient list when search input empty
+   if (ingredientSearchUserinput.length == 0) {
+      if (document.querySelector(".ingredients-list")) {
+         document.querySelector(".ingredients-list").remove();
+      }
+      initIngredientList();
+   }
+}
 
-//Ingredient search bar
+//Ingredient search bar event
 const ingredientSearchInput = document.querySelector(".ingredient-search-bar");
 let ingredientSearchUserinput;
 ingredientSearchInput.addEventListener("input", e => {
    ingredientSearchUserinput = normalize(e.target.value);
-
-tagFilteredIngredients = ingredients.filter(ingredient => normalize(ingredient).includes(ingredientSearchUserinput));
-tagFilteredIngredients = Array.from(new Set(tagFilteredIngredients));
-
-console.log(tagFilteredIngredients);
-
-   if(document.querySelector(".ingredients-list")){
-   document.querySelector(".ingredients-list").remove();
-
-
-
-      
-
-}
-
-if (ingredientSearchUserinput.length == 0) {
-   initIngredientList();
-}
-   console.log(ingredientSearchUserinput);
+   updateIngredientsByTags(ingredientSearchUserinput);
 })
 
-//Appliance search bar
+//Update appliances list by tags
+function updateAppliancesByTags(applianceSearchUserinput) {
+
+   //Create new filtered by tag appliance array
+   tagFilteredAppliances = appliances.filter(appliance => normalize(appliance).includes(applianceSearchUserinput));
+   tagFilteredAppliances = Array.from(new Set(tagFilteredAppliances));
+
+   //Initialise appliance list filtered by tag
+   if (document.querySelector(".appliances-list")) {
+      document.querySelector(".appliances-list").remove();
+   }
+   let filteredByTagApplianceList = new ApplianceList(tagFilteredAppliances);
+   appliancesDropdown.appendChild(filteredByTagApplianceList.renderList());
+
+   //Re-Initialise appliance list when search input empty
+   if (applianceSearchUserinput.length == 0) {
+      if (document.querySelector(".appliances-list")) {
+         document.querySelector(".appliances-list").remove();
+      }
+      initApplianceList();
+   }
+}
+
+//Appliance search bar event
 const applianceSearchInput = document.querySelector(".appliance-search-bar");
+let applianceSearchUserInput;
 applianceSearchInput.addEventListener("input", e => {
-   const userInput = e.target.value;
-   console.log(userInput);
+   applianceSearchUserInput = normalize(e.target.value);
+   updateAppliancesByTags(applianceSearchUserInput);
 })
+
+//Update ustensil list by tags
+function updateUstensilsByTags(ustensilsSearchUserinput) {
+   //Create new filtered by tag ingredient array
+   tagFilteredUstensils = ustensils.filter(ustensil => normalize(ustensil).includes(ustensilsSearchUserinput));
+   tagFilteredUstensils = tagFilteredUstensils.map(ustensil => normalizeDOMString(ustensil));
+   tagFilteredUstensils = Array.from(new Set(tagFilteredUstensils));
+
+   //Initialise ustensil list filtered by tag
+   if (document.querySelector(".ustensils-list")) {
+      document.querySelector(".ustensils-list").remove();
+   }
+   let filteredByTagUstensilList = new UstensilList(tagFilteredUstensils);
+   ustensilsDropdown.appendChild(filteredByTagUstensilList.renderList());
+
+   //Re-Initialise ustensil list when search input empty
+   if (ustensilsSearchUserinput.length == 0) {
+      if (document.querySelector(".ustensils-list")) {
+         document.querySelector(".ustensils-list").remove();
+      }
+      initUstensilList();
+   }
+}
+
 
 //Ustensils search bar
 const ustensilSearchInput = document.querySelector(".ustensil-search-bar");
+let ustensilsSearchUserInput;
 ustensilSearchInput.addEventListener("input", e => {
-   const userInput = e.target.value;
-   console.log(userInput);
+   ustensilsSearchUserInput = normalize(e.target.value);
+   updateUstensilsByTags(ustensilsSearchUserInput);
 })
