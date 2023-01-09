@@ -351,24 +351,26 @@ ustensilSearchInput.addEventListener("input", e => {
    }
 })
 
-
-
-
-
-function updateRecipesByingredientTag(recipes, SelectedTagValue) {
-
-   //Create recipes array with maching ingredients
-
+function updateTagLists(recipes) {
+   //Update ingredient list
+   filteredIngredients = [];
    recipes.forEach((recipe) => {
       recipe.ingredients.forEach(obj => {
-         if (normalize(obj.ingredient).includes(SelectedTagValue)) {
-            tagFilteredRecipes.push(recipe);
-         }
+         filteredIngredients.push(obj.ingredient);
       })
    })
+   filteredIngredients = filteredIngredients.map(ingredient => titleCase(ingredient));
+   filteredIngredients = Array.from(new Set(filteredIngredients));
+
+   if (document.querySelector(".ingredients-list")) {
+      document.querySelector(".ingredients-list").remove();
+   }
+   const ingredientList = new IngredientList(filteredIngredients);
+   ingredientsDropdown.appendChild(ingredientList.renderList());
 
    //Update appliance list
-   filteredAppliances = tagFilteredRecipes.map(recipe => recipe.appliance);
+   filteredAppliances = [];
+   filteredAppliances = recipes.map(recipe => recipe.appliance);
    filteredAppliances = Array.from(new Set(filteredAppliances));
    if (document.querySelector(".appliances-list")) {
       document.querySelector(".appliances-list").remove();
@@ -377,7 +379,8 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
    appliancesDropdown.appendChild(filteredApplianceList.renderList());
 
    //Update ustensil list
-   tagFilteredRecipes.forEach((recipe) => {
+   filteredUstensils = [];
+   recipes.forEach((recipe) => {
       recipe.ustensils.forEach((ustensil) => {
          filteredUstensils.push(ustensil);
       })
@@ -389,6 +392,20 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
       document.querySelector(".ustensils-list").remove();
    }
    ustensilsDropdown.appendChild(ustensilList.renderList());
+}
+
+function updateRecipesByingredientTag(recipes, SelectedTagValue) {
+
+   //Create recipes array with maching ingredients
+   recipes.forEach((recipe) => {
+      recipe.ingredients.forEach(obj => {
+         if (normalize(obj.ingredient).includes(SelectedTagValue)) {
+            tagFilteredRecipes.push(recipe);
+         }
+      })
+   })
+
+   updateTagLists(tagFilteredRecipes);
 
    //Initialise Recipes cards
    let filteredCards = new RecipeCards(tagFilteredRecipes);
@@ -403,6 +420,8 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ingredient')) {
       let ingredientTagValue = normalize(e.target.textContent);
 
+
+
       updateRecipesByingredientTag(recipes, ingredientTagValue);
 
    }
@@ -413,34 +432,7 @@ function updateRecipesByApplianceTag(recipes, SelectedTagValue) {
    //Create recipes array with matching appliances
    tagFilteredRecipes = recipes.filter(recipe => normalize(recipe.appliance).includes(SelectedTagValue));;
 
-   //Update ustensil list
-   tagFilteredRecipes.forEach((recipe) => {
-      recipe.ustensils.forEach((ustensil) => {
-         filteredUstensils.push(ustensil);
-      })
-   })
-   filteredUstensils = Array.from(new Set(filteredUstensils));
-   filteredUstensils = filteredUstensils.map(word => normalizeDOMString(word));
-   const ustensilList = new UstensilList(filteredUstensils);
-   if (document.querySelector(".ustensils-list")) {
-      document.querySelector(".ustensils-list").remove();
-   }
-   ustensilsDropdown.appendChild(ustensilList.renderList());
-
-   //Update ingredient list
-   tagFilteredRecipes.forEach((recipe) => {
-      recipe.ingredients.forEach(obj => {
-         filteredIngredients.push(obj.ingredient);
-      })
-   })
-   filteredIngredients = filteredIngredients.map(ingredient => titleCase(ingredient));
-   filteredIngredients = Array.from(new Set(filteredIngredients));
-
-   if (document.querySelector(".ingredients-list")) {
-      document.querySelector(".ingredients-list").remove();
-   }
-   const ingredientList = new IngredientList(filteredIngredients);
-   ingredientsDropdown.appendChild(ingredientList.renderList());
+   updateTagLists(tagFilteredRecipes);
 
    //Initialise Recipes cards
    let filteredCards = new RecipeCards(tagFilteredRecipes);
@@ -461,6 +453,7 @@ document.addEventListener("click", (e) => {
    }
 })
 
+
 function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
 
    //Create recipes array with matching ustensils
@@ -472,29 +465,7 @@ function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
       })
    })
 
-   //Update appliance list
-   filteredAppliances = tagFilteredRecipes.map(recipe => recipe.appliance);
-   filteredAppliances = Array.from(new Set(filteredAppliances));
-   if (document.querySelector(".appliances-list")) {
-      document.querySelector(".appliances-list").remove();
-   }
-   let filteredApplianceList = new ApplianceList(filteredAppliances);
-   appliancesDropdown.appendChild(filteredApplianceList.renderList());
-
-   //Update ingredient list
-   tagFilteredRecipes.forEach((recipe) => {
-      recipe.ingredients.forEach(obj => {
-         filteredIngredients.push(obj.ingredient);
-      })
-   })
-   filteredIngredients = filteredIngredients.map(ingredient => titleCase(ingredient));
-   filteredIngredients = Array.from(new Set(filteredIngredients));
-
-   if (document.querySelector(".ingredients-list")) {
-      document.querySelector(".ingredients-list").remove();
-   }
-   const ingredientList = new IngredientList(filteredIngredients);
-   ingredientsDropdown.appendChild(ingredientList.renderList());
+   updateTagLists(tagFilteredRecipes);
 
    //Initialise Recipes cards
    let filteredCards = new RecipeCards(tagFilteredRecipes);
