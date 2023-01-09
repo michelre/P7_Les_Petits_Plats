@@ -278,12 +278,12 @@ function updateIngredientsByTags(ingredientSearchUserinput) {
 
 //Ingredient search bar event
 const ingredientSearchInput = document.querySelector(".ingredient-search-bar");
-let ingredientSearchUserinput;
+let ingredientSearchUserInput;
 ingredientSearchInput.addEventListener("input", e => {
-   ingredientSearchUserinput = normalize(e.target.value);
-   updateIngredientsByTags(ingredientSearchUserinput);
+   ingredientSearchUserInput = normalize(e.target.value);
+   updateIngredientsByTags(ingredientSearchUserInput);
    //Re-Initialise ingredient list when search input empty
-   if (ingredientSearchUserinput.length == 0) {
+   if (ingredientSearchUserInput.length == 0) {
       if (document.querySelector(".ingredients-list")) {
          document.querySelector(".ingredients-list").remove();
       }
@@ -313,7 +313,7 @@ applianceSearchInput.addEventListener("input", e => {
    applianceSearchUserInput = normalize(e.target.value);
    updateAppliancesByTags(applianceSearchUserInput);
    //Re-Initialise appliance list when search input empty
-   if (applianceSearchUserinput.length == 0) {
+   if (applianceSearchUserInput.length == 0) {
       if (document.querySelector(".appliances-list")) {
          document.querySelector(".appliances-list").remove();
       }
@@ -343,7 +343,7 @@ ustensilSearchInput.addEventListener("input", e => {
    ustensilsSearchUserInput = normalize(e.target.value);
    updateUstensilsByTags(ustensilsSearchUserInput);
    //Re-Initialise ustensil list when search input empty
-   if (ustensilsSearchUserinput.length == 0) {
+   if (ustensilsSearchUserInput.length == 0) {
       if (document.querySelector(".ustensils-list")) {
          document.querySelector(".ustensils-list").remove();
       }
