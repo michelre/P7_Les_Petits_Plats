@@ -15,6 +15,7 @@ class IngredientList {
             const ingredientListItem = document.createElement("li");
             ingredientListItem.textContent = this.ingredients[i];
             ingredientsList.appendChild(ingredientListItem);
+            ingredientListItem.dataset.ingredient = this.ingredients[i];
 
             //Create  active tags
             const activeTags = document.querySelector(".active-tags");
@@ -32,11 +33,12 @@ class IngredientList {
             tagButton.appendChild(tagButtonClose);
 
             function displayTag() {
-                    activeTags.appendChild(tagButton);
+                activeTags.appendChild(tagButton);
             }
 
             tagButtonClose.addEventListener("click", (e) => e.target.parentNode.remove());
             ingredientListItem.addEventListener("click", displayTag);
+
         }
 
         return ingredientsList;

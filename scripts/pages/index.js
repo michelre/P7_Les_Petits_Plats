@@ -14,17 +14,21 @@ const ustensilsDropdown = document.querySelector(".ustensils-dropdown");
 const ustensilsButton = document.querySelector(".filter-button-ustensils");
 const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
 const mainSection = document.querySelector("main");
+
 let recipes = [];
 let filteredRecipes = [];
 let tagFilteredRecipes = [];
+
 let ingredients = [];
 let filteredIngredients = [];
+let tagFilteredIngredients = [];
+
 let appliances = [];
 let filteredAppliances = [];
+let tagFilteredAppliances = [];
+
 let ustensils = [];
 let filteredUstensils = [];
-let tagFilteredIngredients = [];
-let tagFilteredAppliances = [];
 let tagFilteredUstensils = [];
 
 //Decapitalise all letters except first
@@ -36,6 +40,8 @@ function titleCase(string) {
 function normalizeDOMString(string) {
    return titleCase(string).replace(/[0-9]/g, '').replace(/[{()}]/g, '');
 }
+
+//************************** DOM Initialisation **********************/
 
 //Initialise recipe cards
 async function initCards() {
@@ -138,7 +144,7 @@ function normalize(string) {
    return string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-//-------------------------Main search bar----------------------------
+//****************************** Main search bar ************************
 
 //Main search bar error message
 function displaySearchError() {
@@ -188,7 +194,6 @@ function mainSearchAlgo(mainSearchUserinput) {
       if (document.querySelector(".recipes-section")) {
          document.querySelector(".recipes-section").remove();
       }
-
       mainSection.appendChild(filteredCards.renderCards());
 
       //Initialise filtered ingredients tag list
@@ -252,8 +257,8 @@ let mainSearchUserinput;
 mainSearchInput.addEventListener("input", e => {
    mainSearchUserinput = normalize(e.target.value);
    mainSearchAlgo(mainSearchUserinput);
-
 })
+//*********************Tag search **************************/
 
 //Update ingredients list by tags
 function updateIngredientsByTags(ingredientSearchUserinput) {
@@ -269,13 +274,6 @@ function updateIngredientsByTags(ingredientSearchUserinput) {
    let filteredByTagingredientList = new IngredientList(tagFilteredIngredients);
    ingredientsDropdown.appendChild(filteredByTagingredientList.renderList());
 
-   //Re-Initialise ingredient list when search input empty
-   if (ingredientSearchUserinput.length == 0) {
-      if (document.querySelector(".ingredients-list")) {
-         document.querySelector(".ingredients-list").remove();
-      }
-      initIngredientList();
-   }
 }
 
 //Ingredient search bar event
@@ -284,6 +282,13 @@ let ingredientSearchUserinput;
 ingredientSearchInput.addEventListener("input", e => {
    ingredientSearchUserinput = normalize(e.target.value);
    updateIngredientsByTags(ingredientSearchUserinput);
+   //Re-Initialise ingredient list when search input empty
+   if (ingredientSearchUserinput.length == 0) {
+      if (document.querySelector(".ingredients-list")) {
+         document.querySelector(".ingredients-list").remove();
+      }
+      initIngredientList();
+   }
 })
 
 //Update appliances list by tags
@@ -299,14 +304,6 @@ function updateAppliancesByTags(applianceSearchUserinput) {
    }
    let filteredByTagApplianceList = new ApplianceList(tagFilteredAppliances);
    appliancesDropdown.appendChild(filteredByTagApplianceList.renderList());
-
-   //Re-Initialise appliance list when search input empty
-   if (applianceSearchUserinput.length == 0) {
-      if (document.querySelector(".appliances-list")) {
-         document.querySelector(".appliances-list").remove();
-      }
-      initApplianceList();
-   }
 }
 
 //Appliance search bar event
@@ -315,6 +312,13 @@ let applianceSearchUserInput;
 applianceSearchInput.addEventListener("input", e => {
    applianceSearchUserInput = normalize(e.target.value);
    updateAppliancesByTags(applianceSearchUserInput);
+   //Re-Initialise appliance list when search input empty
+   if (applianceSearchUserinput.length == 0) {
+      if (document.querySelector(".appliances-list")) {
+         document.querySelector(".appliances-list").remove();
+      }
+      initApplianceList();
+   }
 })
 
 //Update ustensil list by tags
@@ -330,16 +334,7 @@ function updateUstensilsByTags(ustensilsSearchUserinput) {
    }
    let filteredByTagUstensilList = new UstensilList(tagFilteredUstensils);
    ustensilsDropdown.appendChild(filteredByTagUstensilList.renderList());
-
-   //Re-Initialise ustensil list when search input empty
-   if (ustensilsSearchUserinput.length == 0) {
-      if (document.querySelector(".ustensils-list")) {
-         document.querySelector(".ustensils-list").remove();
-      }
-      initUstensilList();
-   }
 }
-
 
 //Ustensils search bar
 const ustensilSearchInput = document.querySelector(".ustensil-search-bar");
@@ -347,4 +342,58 @@ let ustensilsSearchUserInput;
 ustensilSearchInput.addEventListener("input", e => {
    ustensilsSearchUserInput = normalize(e.target.value);
    updateUstensilsByTags(ustensilsSearchUserInput);
+   //Re-Initialise ustensil list when search input empty
+   if (ustensilsSearchUserinput.length == 0) {
+      if (document.querySelector(".ustensils-list")) {
+         document.querySelector(".ustensils-list").remove();
+      }
+      initUstensilList();
+   }
+})
+
+//**************************************** */
+
+
+
+//Update recipe cards by tag
+function updateCardsByIngredientTag(ingredientTagValue) {
+
+   //Create array of recipe filtereed by ingredient tag
+
+   recipes.forEach((recipe) => {
+      recipe.ingredients.forEach(obj => {
+         if (normalize(obj.ingredient).includes(normalize(ingredientTagValue))) {
+            tagFilteredRecipes.push(recipe);
+         }
+      })
+   })
+
+
+
+
+   //Initialise recipes cards filtered by ingredient tag
+   tagFilteredRecipes = Array.from(new Set(tagFilteredRecipes));
+   let filteredByTagCards = new RecipeCards(tagFilteredRecipes);
+   if (document.querySelector(".recipes-section")) {
+      document.querySelector(".recipes-section").remove();
+   }
+   mainSection.appendChild(filteredByTagCards.renderCards());
+}
+
+// Function to update ingredient tag from selected tags
+function uptadeIngredientsBySelectedTags(ingredientTagValue) {
+
+
+
+}
+
+
+//Ingredient tag list item event Listener
+document.addEventListener("click", (e) => {
+   if (e.target.getAttribute('data-ingredient')) {
+      let ingredientTagValue = normalize(e.target.textContent);
+      uptadeIngredientsBySelectedTags(ingredientTagValue);
+
+
+   }
 })

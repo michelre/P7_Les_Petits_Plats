@@ -30,7 +30,6 @@ class ApplianceList {
             tagButtonClose.classList.add("tag-button-close");
             tagButton.appendChild(tagButtonClose);
 
-
             function displayTag() {
                 activeTags.appendChild(tagButton);
             }
