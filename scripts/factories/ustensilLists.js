@@ -13,6 +13,7 @@ class UstensilList {
             //Create tag list
                 const ustensilListItem = document.createElement("li");
                 ustensilListItem.textContent = this.ustensils[i];
+                ustensilListItem.dataset.ustensil = this.ustensils[i];
                 ustensilsList.appendChild(ustensilListItem);  
                 
                 //Create  active tags

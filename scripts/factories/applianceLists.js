@@ -14,6 +14,7 @@ class ApplianceList {
             const applianceListItem = document.createElement("li");
             applianceListItem.textContent = this.appliances[i];
             appliancesList.appendChild(applianceListItem);
+            applianceListItem.dataset.appliance = this.appliances[i];
 
             //Create active tags
             const activeTags = document.querySelector(".active-tags");
@@ -33,11 +34,6 @@ class ApplianceList {
             function displayTag() {
                 activeTags.appendChild(tagButton);
             }
-
-            //Tag list item event listener
-            applianceListItem.addEventListener("click", (e) => {
-                console.log(e.target.textContent);
-            })
 
             //Close button event listener
             tagButtonClose.addEventListener("click", (e) => e.target.parentNode.remove());
