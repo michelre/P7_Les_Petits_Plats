@@ -182,7 +182,12 @@ function mainSearch(recipesArray, userInput) {
 //Main search functional programmation algorithm
 function mainSearchAlgo(mainSearchUserinput) {
    if (mainSearchUserinput.length > 2) {
-      filteredRecipes = mainSearch(recipes, mainSearchUserinput);
+      //Check if any tag selected
+      if (tagFilteredRecipes.length == 0) {
+         filteredRecipes = mainSearch(recipes, mainSearchUserinput);
+      } else if(filteredRecipesBuffer.length > 0) {
+         filteredRecipes = mainSearch(filteredRecipesBuffer, mainSearchUserinput);
+      }
 
       if (filteredRecipes.length == 0) {
          displaySearchError();
@@ -257,6 +262,9 @@ const mainSearchInput = document.getElementById("search");
 let mainSearchUserinput;
 mainSearchInput.addEventListener("input", e => {
    mainSearchUserinput = normalize(e.target.value);
+
+
+   
    mainSearchAlgo(mainSearchUserinput);
 })
 //*********************Tag search **************************/
@@ -535,7 +543,6 @@ document.addEventListener("click", (e) => {
             }
          }
       }
-
       document.querySelector(".ustensil-search-bar").value = "";
    }
 })
