@@ -18,6 +18,7 @@ const mainSection = document.querySelector("main");
 let recipes = [];
 let filteredRecipes = [];
 let tagFilteredRecipes = [];
+let filteredRecipesBuffer = [];
 
 let ingredients = [];
 let filteredIngredients = [];
@@ -397,6 +398,7 @@ function updateTagLists(recipes) {
 function updateRecipesByingredientTag(recipes, SelectedTagValue) {
 
    //Create recipes array with maching ingredients
+   tagFilteredRecipes = [];
    recipes.forEach((recipe) => {
       recipe.ingredients.forEach(obj => {
          if (normalize(obj.ingredient).includes(SelectedTagValue)) {
@@ -415,14 +417,32 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
    mainSection.appendChild(filteredCards.renderCards());
 }
 
+
+
 //Ingredient tag list item event Listener
 document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ingredient')) {
       let ingredientTagValue = normalize(e.target.textContent);
 
+      if (filteredRecipes.length == 0 && tagFilteredRecipes.length == 0) {
+         updateRecipesByingredientTag(recipes, ingredientTagValue);
+      } else if (filteredRecipes.length == 0 && tagFilteredRecipes.length > 0) {
+         filteredRecipesBuffer = tagFilteredRecipes;
+         updateRecipesByingredientTag(filteredRecipesBuffer, ingredientTagValue);
+      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length == 0) {
+         updateRecipesByingredientTag(filteredRecipes, ingredientTagValue);
+      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length > 0) {
 
+         filteredRecipesBuffer = [];
+         for (let i = 0; i < tagFilteredRecipes.length; i++) {
+            if (tagFilteredRecipes[i] == filteredRecipes[i]) {
+               filteredRecipesBuffer.push(tagFilteredRecipes[i]);
+               updateRecipesByingredientTag(filteredRecipesBuffer, ingredientTagValue);
+            }
+         }
+      }
 
-      updateRecipesByingredientTag(recipes, ingredientTagValue);
+      document.querySelector(".ingredient-search-bar").value = "";
 
    }
 })
@@ -430,7 +450,7 @@ document.addEventListener("click", (e) => {
 function updateRecipesByApplianceTag(recipes, SelectedTagValue) {
 
    //Create recipes array with matching appliances
-   tagFilteredRecipes = recipes.filter(recipe => normalize(recipe.appliance).includes(SelectedTagValue));;
+   tagFilteredRecipes = recipes.filter(recipe => normalize(recipe.appliance).includes(SelectedTagValue));
 
    updateTagLists(tagFilteredRecipes);
 
@@ -448,8 +468,25 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-appliance')) {
       let applianceTagValue = normalize(e.target.textContent);
 
-      updateRecipesByApplianceTag(recipes, applianceTagValue);
+      if (filteredRecipes.length == 0 && tagFilteredRecipes.length == 0) {
+         updateRecipesByApplianceTag(recipes, applianceTagValue);
+      } else if (filteredRecipes.length == 0 && tagFilteredRecipes.length > 0) {
+         filteredRecipesBuffer = tagFilteredRecipes;
+         updateRecipesByApplianceTag(filteredRecipesBuffer, applianceTagValue);
+      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length == 0) {
+         updateRecipesByApplianceTag(filteredRecipes, applianceTagValue);
+      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length > 0) {
 
+         filteredRecipesBuffer = [];
+         for (let i = 0; i < tagFilteredRecipes.length; i++) {
+            if (tagFilteredRecipes[i] == filteredRecipes[i]) {
+               filteredRecipesBuffer.push(tagFilteredRecipes[i]);
+               updateRecipesByApplianceTag(filteredRecipesBuffer, applianceTagValue);
+            }
+         }
+      }
+
+      document.querySelector(".appliance-search-bar").value = "";
    }
 })
 
@@ -457,6 +494,7 @@ document.addEventListener("click", (e) => {
 function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
 
    //Create recipes array with matching ustensils
+   tagFilteredRecipes = [];
    recipes.forEach((recipe) => {
       recipe.ustensils.forEach(ustensil => {
          if (normalize(ustensil).includes(SelectedTagValue)) {
@@ -481,7 +519,23 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ustensil')) {
       let ustensilTagValue = normalize(e.target.textContent);
 
-      updateRecipesByUstensilsTag(recipes, ustensilTagValue);
+      if (filteredRecipes.length == 0 && tagFilteredRecipes.length == 0) {
+         updateRecipesByUstensilsTag(recipes, ustensilTagValue);
+      } else if (filteredRecipes.length == 0 && tagFilteredRecipes.length > 0) {
+         filteredRecipesBuffer = tagFilteredRecipes;
+         updateRecipesByUstensilsTag(filteredRecipesBuffer, ustensilTagValue);
+      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length == 0) {
+         updateRecipesByUstensilsTag(filteredRecipes, ustensilTagValue);
+      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length > 0) {
+         filteredRecipesBuffer = [];
+         for (let i = 0; i < tagFilteredRecipes.length; i++) {
+            if (tagFilteredRecipes[i] == filteredRecipes[i]) {
+               filteredRecipesBuffer.push(tagFilteredRecipes[i]);
+               updateRecipesByUstensilsTag(filteredRecipesBuffer, ustensilTagValue);
+            }
+         }
+      }
 
+      document.querySelector(".ustensil-search-bar").value = "";
    }
 })
