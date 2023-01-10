@@ -156,7 +156,8 @@ function hideSearchError() {
    document.querySelector(".search-error-message").style.display = "none";
 }
 
-function mainSearch(recipesArray, userInput) {
+//Main search functional programmation algorithm *******************
+function mainSearchAlgo(recipesArray, userInput) {
    //create array with matching titles
    const nameMatchArray = recipesArray.filter(recipe => normalize(recipe.name).includes(userInput));
 
@@ -179,14 +180,38 @@ function mainSearch(recipesArray, userInput) {
    return Array.from(new Set(mainSearchArray));
 }
 
-//Main search functional programmation algorithm
-function mainSearchAlgo(mainSearchUserinput) {
+// //Main search native loop algorithm ************** 
+// function mainSearchAlgo(recipesArray, userInput) {
+//    const mainSearchArray = [];
+//    for (let i = 0; i < recipesArray.length; i++) {
+//       //Check if search input matches title + add
+//       if (normalize(recipesArray[i].name).includes(userInput)) {
+//          mainSearchArray.push(recipesArray[i]);    
+//       }
+//       //Check if search input matches description + add
+//       if (normalize(recipesArray[i].description).includes(userInput)) {
+//          mainSearchArray.push(recipesArray[i]);
+//       }
+//       //Check if search input matches ingredients + add
+//       for (let j = 0; j < recipesArray[i].ingredients.length; j++) {
+//          if (normalize(recipesArray[i].ingredients[j].ingredient).includes(userInput)) {
+//             mainSearchArray.push(recipesArray[i]);
+//          }
+//       }
+//    }
+//    //Removes duplicates and return array
+//    return Array.from(new Set(mainSearchArray));
+// }
+
+
+//Main search initialisation
+function mainSearch(mainSearchUserinput) {
    if (mainSearchUserinput.length > 2) {
       //Check if any tag selected
-      if (tagFilteredRecipes.length == 0) {
-         filteredRecipes = mainSearch(recipes, mainSearchUserinput);
-      } else if(filteredRecipesBuffer.length > 0) {
-         filteredRecipes = mainSearch(filteredRecipesBuffer, mainSearchUserinput);
+      if (filteredRecipesBuffer.length == 0) {
+         filteredRecipes = mainSearchAlgo(recipes, mainSearchUserinput);
+      } else if (filteredRecipesBuffer.length > 0) {
+         filteredRecipes = mainSearchAlgo(filteredRecipesBuffer, mainSearchUserinput);
       }
 
       if (filteredRecipes.length == 0) {
@@ -244,7 +269,7 @@ function mainSearchAlgo(mainSearchUserinput) {
       ustensilsDropdown.appendChild(ustensilList.renderList());
    }
 
-   if (mainSearchUserinput.length <= 2) {
+   if (mainSearchUserinput.length <= 2 && filteredRecipesBuffer == 0) {
       document.querySelector(".recipes-section").remove();
       document.querySelector(".ingredients-list").remove();
       document.querySelector(".appliances-list").remove();
@@ -262,10 +287,7 @@ const mainSearchInput = document.getElementById("search");
 let mainSearchUserinput;
 mainSearchInput.addEventListener("input", e => {
    mainSearchUserinput = normalize(e.target.value);
-
-
-   
-   mainSearchAlgo(mainSearchUserinput);
+   mainSearch(mainSearchUserinput);
 })
 //*********************Tag search **************************/
 
