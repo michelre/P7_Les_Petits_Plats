@@ -22,6 +22,7 @@ class IngredientList {
             const tagButton = document.createElement("div");
             tagButton.classList.add("tag-button");
             tagButton.classList.add("ingredient-tag");
+            tagButton.dataset.ingredientActiveTag = this.ingredients[i];
             const tagButtonText = document.createElement("p");
             tagButton.textContent = this.ingredients[i];
             tagButtonText.classList.add("tag-button-text");

@@ -25,6 +25,7 @@ class UstensilList {
             tagButton.textContent = this.ustensils[i];
             tagButtonText.classList.add("tag-button-text");
             tagButton.appendChild(tagButtonText);
+            tagButton.dataset.ustensilActiveTag = this.ustensils[i];
             const tagButtonClose = document.createElement("i");
             tagButtonClose.classList.add("fa-regular");
             tagButtonClose.classList.add("fa-circle-xmark");

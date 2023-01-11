@@ -494,6 +494,15 @@ function updateTagLists(recipes) {
    ustensilsDropdown.appendChild(ustensilList.renderList());
 }
 
+function updateRecipesFromGlobal() {
+   updateTagLists(globalFilter());
+   let filteredCards = new RecipeCards(globalFilter());
+   if (document.querySelector(".recipes-section")) {
+      document.querySelector(".recipes-section").remove();
+   }
+   mainSection.appendChild(filteredCards.renderCards());
+}
+
 function updateRecipesByingredientTag(recipes, SelectedTagValue) {
 
    //Create recipes array with maching ingredients
@@ -505,9 +514,7 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
          }
       })
    })
-
    updateTagLists(tagFilteredRecipes);
-
    //Initialise Recipes cards
    let filteredCards = new RecipeCards(tagFilteredRecipes);
    if (document.querySelector(".recipes-section")) {
@@ -521,12 +528,22 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
 document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ingredient')) {
       let ingredientTagValue = normalize(e.target.textContent);
-
       ingredientsFilter.push(ingredientTagValue);
       updateRecipesByingredientTag(globalFilter(), ingredientTagValue);
-
       document.querySelector(".ingredient-search-bar").value = "";
 
+   }
+})
+
+//Ingredient active tag button close
+document.addEventListener("click", (e) => {
+   if (e.target.parentNode.getAttribute('data-ingredient-active-tag')) {
+      let ingredientTagValue = normalize(e.target.parentNode.getAttribute('data-ingredient-active-tag'));
+      ingredientsFilter = ingredientsFilter.filter((ingredient) => {
+         return ingredient !== ingredientTagValue;
+      })
+      updateRecipesFromGlobal();
+      document.querySelector(".ingredient-search-bar").value = "";
    }
 })
 
@@ -534,9 +551,7 @@ function updateRecipesByApplianceTag(recipes, SelectedTagValue) {
 
    //Create recipes array with matching appliances
    tagFilteredRecipes = recipes.filter(recipe => normalize(recipe.appliance).includes(SelectedTagValue));
-
    updateTagLists(tagFilteredRecipes);
-
    //Initialise Recipes cards
    let filteredCards = new RecipeCards(tagFilteredRecipes);
    if (document.querySelector(".recipes-section")) {
@@ -550,10 +565,20 @@ function updateRecipesByApplianceTag(recipes, SelectedTagValue) {
 document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-appliance')) {
       let applianceTagValue = normalize(e.target.textContent);
-
       appliancesFilter.push(applianceTagValue);
       updateRecipesByApplianceTag(globalFilter(), applianceTagValue);
+      document.querySelector(".appliance-search-bar").value = "";
+   }
+})
 
+//Appliance active tag button close
+document.addEventListener("click", (e) => {
+   if (e.target.parentNode.getAttribute('data-appliance-active-tag')) {
+      let applianceTagValue = normalize(e.target.parentNode.getAttribute('data-appliance-active-tag'));
+      appliancesFilter = appliancesFilter.filter((appliance) => {
+         return appliance !== applianceTagValue;
+      })
+      updateRecipesFromGlobal();
       document.querySelector(".appliance-search-bar").value = "";
    }
 })
@@ -569,9 +594,7 @@ function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
          }
       })
    })
-
    updateTagLists(tagFilteredRecipes);
-
    //Initialise Recipes cards
    let filteredCards = new RecipeCards(tagFilteredRecipes);
    if (document.querySelector(".recipes-section")) {
@@ -585,10 +608,20 @@ function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
 document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ustensil')) {
       let ustensilTagValue = normalize(e.target.textContent);
-
       ustensilsFilter.push(ustensilTagValue);
       updateRecipesByUstensilsTag(globalFilter(), ustensilTagValue);
+      document.querySelector(".ustensil-search-bar").value = "";
+   }
+})
 
+//Ustensil active tag button close
+document.addEventListener("click", (e) => {
+   if (e.target.parentNode.getAttribute('data-ustensil-active-tag')) {
+      let ustensilTagValue = normalize(e.target.parentNode.getAttribute('data-ustensil-active-tag'));
+      ustensilsFilter = ustensilsFilter.filter((ustensil) => {
+         return ustensil !== ustensilTagValue;
+      })
+      updateRecipesFromGlobal();
       document.querySelector(".ustensil-search-bar").value = "";
    }
 })

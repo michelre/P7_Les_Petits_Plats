@@ -21,6 +21,7 @@ class ApplianceList {
             const tagButton = document.createElement("div");
             tagButton.classList.add("tag-button");
             tagButton.classList.add("appliance-tag");
+            tagButton.dataset.applianceActiveTag = this.appliances[i];
             const tagButtonText = document.createElement("p");
             tagButton.textContent = this.appliances[i];
             tagButtonText.classList.add("tag-button-text");
