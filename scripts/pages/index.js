@@ -17,18 +17,22 @@ const mainSection = document.querySelector("main");
 
 let recipes = [];
 let filteredRecipes = [];
+let _mainSearchfilteredRecipes = [];
 let tagFilteredRecipes = [];
 let filteredRecipesBuffer = [];
 
 let ingredients = [];
+let _ingredients = [];
 let filteredIngredients = [];
 let tagFilteredIngredients = [];
 
 let appliances = [];
+let _appliances = [];
 let filteredAppliances = [];
 let tagFilteredAppliances = [];
 
 let ustensils = [];
+let _ustensils = [];
 let filteredUstensils = [];
 let tagFilteredUstensils = [];
 
@@ -145,6 +149,57 @@ function normalize(string) {
    return string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
+//*************** Global Recipe Filtering *********/
+function isFilteredByIngredients(recipe) {
+   if (_ingredients.length === 0) {
+      return true; //Keep all recipes if not filtered by ingredients
+   }
+   return recipe.ingredients
+      .filter((ingredient) => _ingredients.includes(normalize(ingredient.ingredient)))
+      .length === _ingredients.length; //Keep only recipes wich contain all filtered ingredients
+}
+
+function isFilteredByUstensils(recipe) {
+   if (_ustensils.length === 0) {
+      return true;
+   }
+   return recipe.ustensils
+      .filter((ustensil) => _ustensils.includes(normalize(ustensil))).length === _ustensils.length;
+}
+
+function isFilteredByAppliances(recipe) {
+   if (_appliances.length === 0) {
+      return true;
+   }
+   return _appliances.includes(normalize(recipe.appliance));
+}
+
+function isFilteredByMainSearch(recipe) {
+   if (_mainSearchfilteredRecipes.length === 0) {
+      return true;
+   }
+   return _mainSearchfilteredRecipes.includes(recipe);
+}
+
+function globalFilter() {
+   return recipes.filter(recipe => {
+      return (
+         isFilteredByIngredients(recipe)
+         &&
+         isFilteredByUstensils(recipe)
+         &&
+         isFilteredByAppliances(recipe)
+         &&
+         isFilteredByMainSearch(recipe)
+      )
+   })
+}
+
+
+
+
+
+
 //****************************** Main search bar ************************
 
 //Main search bar error message
@@ -165,14 +220,10 @@ function mainSearchAlgo(recipesArray, userInput) {
    const descriptionMatchArray = recipesArray.filter(recipe => normalize(recipe.description).includes(userInput));
 
    //create array with maching ingredients
-   const ingredientsMatchArray = [];
-   recipesArray.forEach((recipe) => {
-      recipe.ingredients.forEach(obj => {
-         if (normalize(obj.ingredient).includes(userInput)) {
-            ingredientsMatchArray.push(recipe);
-         }
-      })
-   })
+   const ingredientsMatchArray = recipesArray.filter((recipe) => {
+      recipe.ingredients
+         .filter((ingredient) => _ingredients.includes(normalize(ingredient.ingredient)))
+   });
 
    //create single array from above ones
    const mainSearchArray = [...nameMatchArray, ...descriptionMatchArray, ...ingredientsMatchArray];
@@ -208,11 +259,9 @@ function mainSearchAlgo(recipesArray, userInput) {
 function mainSearch(mainSearchUserinput) {
    if (mainSearchUserinput.length > 2) {
       //Check if any tag selected
-      if (filteredRecipesBuffer.length == 0) {
-         filteredRecipes = mainSearchAlgo(recipes, mainSearchUserinput);
-      } else if (filteredRecipesBuffer.length > 0) {
-         filteredRecipes = mainSearchAlgo(filteredRecipesBuffer, mainSearchUserinput);
-      }
+
+      filteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
+
 
       if (filteredRecipes.length == 0) {
          displaySearchError();
@@ -267,9 +316,12 @@ function mainSearch(mainSearchUserinput) {
          document.querySelector(".ustensils-list").remove();
       }
       ustensilsDropdown.appendChild(ustensilList.renderList());
+
+      //Set global filtered search
+      _mainSearchfilteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
    }
 
-   if (mainSearchUserinput.length <= 2 && filteredRecipesBuffer == 0) {
+   if (mainSearchUserinput.length <= 2 && _mainSearchfilteredRecipes.length === 0) {
       document.querySelector(".recipes-section").remove();
       document.querySelector(".ingredients-list").remove();
       document.querySelector(".appliances-list").remove();
@@ -448,29 +500,13 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
 }
 
 
-
 //Ingredient tag list item event Listener
 document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ingredient')) {
       let ingredientTagValue = normalize(e.target.textContent);
 
-      if (filteredRecipes.length == 0 && tagFilteredRecipes.length == 0) {
-         updateRecipesByingredientTag(recipes, ingredientTagValue);
-      } else if (filteredRecipes.length == 0 && tagFilteredRecipes.length > 0) {
-         filteredRecipesBuffer = tagFilteredRecipes;
-         updateRecipesByingredientTag(filteredRecipesBuffer, ingredientTagValue);
-      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length == 0) {
-         updateRecipesByingredientTag(filteredRecipes, ingredientTagValue);
-      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length > 0) {
-
-         filteredRecipesBuffer = [];
-         for (let i = 0; i < tagFilteredRecipes.length; i++) {
-            if (tagFilteredRecipes[i] == filteredRecipes[i]) {
-               filteredRecipesBuffer.push(tagFilteredRecipes[i]);
-               updateRecipesByingredientTag(filteredRecipesBuffer, ingredientTagValue);
-            }
-         }
-      }
+      _ingredients.push(ingredientTagValue);
+      updateRecipesByingredientTag(globalFilter(), ingredientTagValue);
 
       document.querySelector(".ingredient-search-bar").value = "";
 
@@ -498,23 +534,8 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-appliance')) {
       let applianceTagValue = normalize(e.target.textContent);
 
-      if (filteredRecipes.length == 0 && tagFilteredRecipes.length == 0) {
-         updateRecipesByApplianceTag(recipes, applianceTagValue);
-      } else if (filteredRecipes.length == 0 && tagFilteredRecipes.length > 0) {
-         filteredRecipesBuffer = tagFilteredRecipes;
-         updateRecipesByApplianceTag(filteredRecipesBuffer, applianceTagValue);
-      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length == 0) {
-         updateRecipesByApplianceTag(filteredRecipes, applianceTagValue);
-      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length > 0) {
-
-         filteredRecipesBuffer = [];
-         for (let i = 0; i < tagFilteredRecipes.length; i++) {
-            if (tagFilteredRecipes[i] == filteredRecipes[i]) {
-               filteredRecipesBuffer.push(tagFilteredRecipes[i]);
-               updateRecipesByApplianceTag(filteredRecipesBuffer, applianceTagValue);
-            }
-         }
-      }
+      _appliances.push(applianceTagValue);
+      updateRecipesByApplianceTag(globalFilter(), applianceTagValue);
 
       document.querySelector(".appliance-search-bar").value = "";
    }
@@ -549,22 +570,9 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ustensil')) {
       let ustensilTagValue = normalize(e.target.textContent);
 
-      if (filteredRecipes.length == 0 && tagFilteredRecipes.length == 0) {
-         updateRecipesByUstensilsTag(recipes, ustensilTagValue);
-      } else if (filteredRecipes.length == 0 && tagFilteredRecipes.length > 0) {
-         filteredRecipesBuffer = tagFilteredRecipes;
-         updateRecipesByUstensilsTag(filteredRecipesBuffer, ustensilTagValue);
-      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length == 0) {
-         updateRecipesByUstensilsTag(filteredRecipes, ustensilTagValue);
-      } else if (filteredRecipes.length > 0 && tagFilteredRecipes.length > 0) {
-         filteredRecipesBuffer = [];
-         for (let i = 0; i < tagFilteredRecipes.length; i++) {
-            if (tagFilteredRecipes[i] == filteredRecipes[i]) {
-               filteredRecipesBuffer.push(tagFilteredRecipes[i]);
-               updateRecipesByUstensilsTag(filteredRecipesBuffer, ustensilTagValue);
-            }
-         }
-      }
+      _ustensils.push(ustensilTagValue);
+      updateRecipesByUstensilsTag(globalFilter(), ustensilTagValue);
+
       document.querySelector(".ustensil-search-bar").value = "";
    }
 })
