@@ -19,22 +19,18 @@ let recipes = [];
 let filteredRecipes = [];
 let _mainSearchfilteredRecipes = [];
 let tagFilteredRecipes = [];
-let filteredRecipesBuffer = [];
 
 let ingredients = [];
 let _ingredients = [];
 let filteredIngredients = [];
-let tagFilteredIngredients = [];
 
 let appliances = [];
 let _appliances = [];
 let filteredAppliances = [];
-let tagFilteredAppliances = [];
 
 let ustensils = [];
 let _ustensils = [];
 let filteredUstensils = [];
-let tagFilteredUstensils = [];
 
 //Decapitalise all letters except first
 function titleCase(string) {
@@ -322,10 +318,18 @@ function mainSearch(mainSearchUserinput) {
    }
 
    if (mainSearchUserinput.length <= 2 && _mainSearchfilteredRecipes.length === 0) {
-      document.querySelector(".recipes-section").remove();
-      document.querySelector(".ingredients-list").remove();
-      document.querySelector(".appliances-list").remove();
-      document.querySelector(".ustensils-list").remove();
+      if(document.querySelector(".recipes-section")){
+         document.querySelector(".recipes-section").remove();
+      }
+      if(document.querySelector(".ingredients-list")){
+         document.querySelector(".ingredients-list").remove();
+      }
+      if(document.querySelector(".appliances-list")){
+         document.querySelector(".appliances-list").remove();
+      }
+      if(document.querySelector(".ustensils-list")){
+         document.querySelector(".ustensils-list").remove();
+      }
       initCards();
       initIngredientList();
       initApplianceList();
@@ -346,7 +350,7 @@ mainSearchInput.addEventListener("input", e => {
 //Update ingredients list by tags
 function updateIngredientsByTags(ingredientSearchUserinput) {
    //Create new filtered by tag ingredient array
-   tagFilteredIngredients = ingredients.filter(ingredient => normalize(ingredient).includes(ingredientSearchUserinput));
+   let tagFilteredIngredients = ingredients.filter(ingredient => normalize(ingredient).includes(ingredientSearchUserinput));
    tagFilteredIngredients = tagFilteredIngredients.map(ingredient => titleCase(ingredient));
    tagFilteredIngredients = Array.from(new Set(tagFilteredIngredients));
 
@@ -378,7 +382,7 @@ ingredientSearchInput.addEventListener("input", e => {
 function updateAppliancesByTags(applianceSearchUserinput) {
 
    //Create new filtered by tag appliance array
-   tagFilteredAppliances = appliances.filter(appliance => normalize(appliance).includes(applianceSearchUserinput));
+   let tagFilteredAppliances = appliances.filter(appliance => normalize(appliance).includes(applianceSearchUserinput));
    tagFilteredAppliances = Array.from(new Set(tagFilteredAppliances));
 
    //Initialise appliance list filtered by tag
@@ -407,7 +411,7 @@ applianceSearchInput.addEventListener("input", e => {
 //Update ustensil list by tags
 function updateUstensilsByTags(ustensilsSearchUserinput) {
    //Create new filtered by tag ingredient array
-   tagFilteredUstensils = ustensils.filter(ustensil => normalize(ustensil).includes(ustensilsSearchUserinput));
+   let tagFilteredUstensils = ustensils.filter(ustensil => normalize(ustensil).includes(ustensilsSearchUserinput));
    tagFilteredUstensils = tagFilteredUstensils.map(ustensil => normalizeDOMString(ustensil));
    tagFilteredUstensils = Array.from(new Set(tagFilteredUstensils));
 
