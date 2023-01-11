@@ -33,8 +33,8 @@ class ApplianceList {
             tagButton.appendChild(tagButtonClose);
 
             function displayTag() {
-                activeTags.appendChild(tagButton);
-            }
+                    activeTags.appendChild(tagButton);           
+                }
 
             //Close button event listener
             tagButtonClose.addEventListener("click", (e) => e.target.parentNode.remove());

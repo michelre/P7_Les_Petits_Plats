@@ -526,7 +526,8 @@ function updateRecipesByingredientTag(recipes, SelectedTagValue) {
 
 //Ingredient tag list item event Listener
 document.addEventListener("click", (e) => {
-   if (e.target.getAttribute('data-ingredient')) {
+   if (e.target.getAttribute('data-ingredient') && !ingredientsFilter.includes(normalize(e.target.getAttribute('data-ingredient')))) {
+
       let ingredientTagValue = normalize(e.target.textContent);
       ingredientsFilter.push(ingredientTagValue);
       updateRecipesByingredientTag(globalFilter(), ingredientTagValue);
@@ -563,7 +564,7 @@ function updateRecipesByApplianceTag(recipes, SelectedTagValue) {
 
 //Appliance tag list item event Listener
 document.addEventListener("click", (e) => {
-   if (e.target.getAttribute('data-appliance')) {
+   if (e.target.getAttribute('data-appliance') && !appliancesFilter.includes(normalize(e.target.getAttribute('data-appliance')))) {
       let applianceTagValue = normalize(e.target.textContent);
       appliancesFilter.push(applianceTagValue);
       updateRecipesByApplianceTag(globalFilter(), applianceTagValue);
@@ -606,7 +607,7 @@ function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
 
 //Ustensil tag list item event Listener
 document.addEventListener("click", (e) => {
-   if (e.target.getAttribute('data-ustensil')) {
+   if (e.target.getAttribute('data-ustensil') && !ustensilsFilter.includes(normalize(e.target.getAttribute('data-ustensil')))) {
       let ustensilTagValue = normalize(e.target.textContent);
       ustensilsFilter.push(ustensilTagValue);
       updateRecipesByUstensilsTag(globalFilter(), ustensilTagValue);

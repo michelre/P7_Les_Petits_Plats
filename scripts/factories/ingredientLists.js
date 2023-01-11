@@ -34,8 +34,8 @@ class IngredientList {
             tagButton.appendChild(tagButtonClose);
 
             function displayTag() {
-                activeTags.appendChild(tagButton);
-            }
+                    activeTags.appendChild(tagButton);         
+                }
 
             tagButtonClose.addEventListener("click", (e) => e.target.parentNode.remove());
             ingredientListItem.addEventListener("click", displayTag);
