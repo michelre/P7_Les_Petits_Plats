@@ -189,10 +189,6 @@ function globalFilter() {
 }
 
 
-
-
-
-
 //****************************** Main search bar ************************
 
 //Main search bar error message
@@ -387,7 +383,7 @@ ingredientSearchInput.addEventListener("input", e => {
 function updateAppliancesByTags(applianceSearchUserinput) {
 
 let appliancesTemp = globalFilter().map(recipe => recipe.appliance);
-appliancesTemp = Array.from(new Set(appliances));
+appliancesTemp = Array.from(new Set(appliancesTemp));
 
    //Create new filtered by tag appliance array
    let tagFilteredAppliances = appliancesTemp.filter(appliance => normalize(appliance).includes(applianceSearchUserinput));
