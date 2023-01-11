@@ -17,19 +17,23 @@ const mainSection = document.querySelector("main");
 
 let recipes = [];
 let filteredRecipes = [];
-let _mainSearchfilteredRecipes = [];
+let mainSearchfilteredRecipes = [];
+let ingredientFilteredRecipes = [];
+let appliancesFilteredRecipes = [];
+let ustensilsFilteredRecipes = [];
+
 let tagFilteredRecipes = [];
 
 let ingredients = [];
-let _ingredients = [];
+
 let filteredIngredients = [];
 
 let appliances = [];
-let _appliances = [];
+
 let filteredAppliances = [];
 
 let ustensils = [];
-let _ustensils = [];
+
 let filteredUstensils = [];
 
 //Decapitalise all letters except first
@@ -147,34 +151,34 @@ function normalize(string) {
 
 //*************** Global Recipe Filtering *********/
 function isFilteredByIngredients(recipe) {
-   if (_ingredients.length === 0) {
+   if (ingredientFilteredRecipes.length === 0) {
       return true; //Keep all recipes if not filtered by ingredients
    }
    return recipe.ingredients
-      .filter((ingredient) => _ingredients.includes(normalize(ingredient.ingredient)))
-      .length === _ingredients.length; //Keep only recipes wich contain all filtered ingredients
+      .filter((ingredient) => ingredientFilteredRecipes.includes(normalize(ingredient.ingredient)))
+      .length === ingredientFilteredRecipes.length; //Keep only recipes wich contain all filtered ingredients
 }
 
 function isFilteredByUstensils(recipe) {
-   if (_ustensils.length === 0) {
+   if (ustensilsFilteredRecipes.length === 0) {
       return true;
    }
    return recipe.ustensils
-      .filter((ustensil) => _ustensils.includes(normalize(ustensil))).length === _ustensils.length;
+      .filter((ustensil) => ustensilsFilteredRecipes.includes(normalize(ustensil))).length === ustensilsFilteredRecipes.length;
 }
 
 function isFilteredByAppliances(recipe) {
-   if (_appliances.length === 0) {
+   if (appliancesFilteredRecipes.length === 0) {
       return true;
    }
-   return _appliances.includes(normalize(recipe.appliance));
+   return appliancesFilteredRecipes.includes(normalize(recipe.appliance));
 }
 
 function isFilteredByMainSearch(recipe) {
-   if (_mainSearchfilteredRecipes.length === 0) {
+   if (mainSearchfilteredRecipes.length === 0) {
       return true;
    }
-   return _mainSearchfilteredRecipes.includes(recipe);
+   return mainSearchfilteredRecipes.includes(recipe);
 }
 
 function globalFilter() {
@@ -218,7 +222,7 @@ function mainSearchAlgo(recipesArray, userInput) {
    //create array with maching ingredients
    const ingredientsMatchArray = recipesArray.filter((recipe) => {
       recipe.ingredients
-         .filter((ingredient) => _ingredients.includes(normalize(ingredient.ingredient)))
+         .filter((ingredient) => ingredientFilteredRecipes.includes(normalize(ingredient.ingredient)))
    });
 
    //create single array from above ones
@@ -314,10 +318,10 @@ function mainSearch(mainSearchUserinput) {
       ustensilsDropdown.appendChild(ustensilList.renderList());
 
       //Set global filtered search
-      _mainSearchfilteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
+      mainSearchfilteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
    }
 
-   if (mainSearchUserinput.length <= 2 && _mainSearchfilteredRecipes.length === 0) {
+   if (mainSearchUserinput.length <= 2 && mainSearchfilteredRecipes.length === 0) {
       if(document.querySelector(".recipes-section")){
          document.querySelector(".recipes-section").remove();
       }
@@ -509,7 +513,7 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ingredient')) {
       let ingredientTagValue = normalize(e.target.textContent);
 
-      _ingredients.push(ingredientTagValue);
+      ingredientFilteredRecipes.push(ingredientTagValue);
       updateRecipesByingredientTag(globalFilter(), ingredientTagValue);
 
       document.querySelector(".ingredient-search-bar").value = "";
@@ -538,7 +542,7 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-appliance')) {
       let applianceTagValue = normalize(e.target.textContent);
 
-      _appliances.push(applianceTagValue);
+      appliancesFilteredRecipes.push(applianceTagValue);
       updateRecipesByApplianceTag(globalFilter(), applianceTagValue);
 
       document.querySelector(".appliance-search-bar").value = "";
@@ -574,7 +578,7 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ustensil')) {
       let ustensilTagValue = normalize(e.target.textContent);
 
-      _ustensils.push(ustensilTagValue);
+      ustensilsFilteredRecipes.push(ustensilTagValue);
       updateRecipesByUstensilsTag(globalFilter(), ustensilTagValue);
 
       document.querySelector(".ustensil-search-bar").value = "";
