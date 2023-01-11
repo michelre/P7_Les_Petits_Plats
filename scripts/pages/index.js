@@ -16,24 +16,14 @@ const ustensilsDropdownClose = document.querySelector(".ustensils-dropdown i");
 const mainSection = document.querySelector("main");
 
 let recipes = [];
-let filteredRecipes = [];
-let mainSearchfilteredRecipes = [];
-let ingredientFilteredRecipes = [];
-let appliancesFilteredRecipes = [];
-let ustensilsFilteredRecipes = [];
+let mainSearchFilter = [];
+let ingredientsFilter = [];
+let appliancesFilter = [];
+let ustensilsFilter = [];
 
 let tagFilteredRecipes = [];
-
-let ingredients = [];
-
 let filteredIngredients = [];
-
-let appliances = [];
-
 let filteredAppliances = [];
-
-let ustensils = [];
-
 let filteredUstensils = [];
 
 //Decapitalise all letters except first
@@ -60,6 +50,7 @@ initCards();
 //Initialise ingredients list
 async function initIngredientList() {
    recipes = await getRecipes();
+   let ingredients = [];
    for (let i = 0; i < recipes.length; i++) {
       for (let j = 0; j < recipes[i].ingredients.length; j++) {
          ingredients.push(recipes[i].ingredients[j].ingredient);
@@ -90,6 +81,7 @@ ingredientsDropdownClose.addEventListener("click", toggleIngredients);
 //Initialise appliances list
 async function initApplianceList() {
    recipes = await getRecipes();
+   let appliances = [];
    appliances = recipes.map(recipe => recipe.appliance);
    appliances = Array.from(new Set(appliances));
 
@@ -116,6 +108,7 @@ appliancesDropdownClose.addEventListener("click", toggleAppliances);
 //Initialise ustensils list
 async function initUstensilList() {
    recipes = await getRecipes();
+   let ustensils = [];
    for (let i = 0; i < recipes.length; i++) {
       for (let j = 0; j < recipes[i].ustensils.length; j++) {
          ustensils.push(recipes[i].ustensils[j]);
@@ -151,34 +144,34 @@ function normalize(string) {
 
 //*************** Global Recipe Filtering *********/
 function isFilteredByIngredients(recipe) {
-   if (ingredientFilteredRecipes.length === 0) {
+   if (ingredientsFilter.length === 0) {
       return true; //Keep all recipes if not filtered by ingredients
    }
    return recipe.ingredients
-      .filter((ingredient) => ingredientFilteredRecipes.includes(normalize(ingredient.ingredient)))
-      .length === ingredientFilteredRecipes.length; //Keep only recipes wich contain all filtered ingredients
+      .filter((ingredient) => ingredientsFilter.includes(normalize(ingredient.ingredient)))
+      .length === ingredientsFilter.length; //Keep only recipes wich contain all filtered ingredients
 }
 
 function isFilteredByUstensils(recipe) {
-   if (ustensilsFilteredRecipes.length === 0) {
+   if (ustensilsFilter.length === 0) {
       return true;
    }
    return recipe.ustensils
-      .filter((ustensil) => ustensilsFilteredRecipes.includes(normalize(ustensil))).length === ustensilsFilteredRecipes.length;
+      .filter((ustensil) => ustensilsFilter.includes(normalize(ustensil))).length === ustensilsFilter.length;
 }
 
 function isFilteredByAppliances(recipe) {
-   if (appliancesFilteredRecipes.length === 0) {
+   if (appliancesFilter.length === 0) {
       return true;
    }
-   return appliancesFilteredRecipes.includes(normalize(recipe.appliance));
+   return appliancesFilter.includes(normalize(recipe.appliance));
 }
 
 function isFilteredByMainSearch(recipe) {
-   if (mainSearchfilteredRecipes.length === 0) {
+   if (mainSearchFilter.length === 0) {
       return true;
    }
-   return mainSearchfilteredRecipes.includes(recipe);
+   return mainSearchFilter.includes(recipe);
 }
 
 function globalFilter() {
@@ -222,7 +215,7 @@ function mainSearchAlgo(recipesArray, userInput) {
    //create array with maching ingredients
    const ingredientsMatchArray = recipesArray.filter((recipe) => {
       recipe.ingredients
-         .filter((ingredient) => ingredientFilteredRecipes.includes(normalize(ingredient.ingredient)))
+         .filter((ingredient) => ingredientsFilter.includes(normalize(ingredient.ingredient)))
    });
 
    //create single array from above ones
@@ -260,8 +253,7 @@ function mainSearch(mainSearchUserinput) {
    if (mainSearchUserinput.length > 2) {
       //Check if any tag selected
 
-      filteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
-
+      let filteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
 
       if (filteredRecipes.length == 0) {
          displaySearchError();
@@ -318,20 +310,20 @@ function mainSearch(mainSearchUserinput) {
       ustensilsDropdown.appendChild(ustensilList.renderList());
 
       //Set global filtered search
-      mainSearchfilteredRecipes = mainSearchAlgo(globalFilter(), mainSearchUserinput);
+      mainSearchFilter = mainSearchAlgo(globalFilter(), mainSearchUserinput);
    }
 
-   if (mainSearchUserinput.length <= 2 && mainSearchfilteredRecipes.length === 0) {
-      if(document.querySelector(".recipes-section")){
+   if (mainSearchUserinput.length <= 2 && ingredientsFilter.length === 0 && appliancesFilter.length === 0 && ustensilsFilter.length === 0) {
+      if (document.querySelector(".recipes-section")) {
          document.querySelector(".recipes-section").remove();
       }
-      if(document.querySelector(".ingredients-list")){
+      if (document.querySelector(".ingredients-list")) {
          document.querySelector(".ingredients-list").remove();
       }
-      if(document.querySelector(".appliances-list")){
+      if (document.querySelector(".appliances-list")) {
          document.querySelector(".appliances-list").remove();
       }
-      if(document.querySelector(".ustensils-list")){
+      if (document.querySelector(".ustensils-list")) {
          document.querySelector(".ustensils-list").remove();
       }
       initCards();
@@ -352,9 +344,17 @@ mainSearchInput.addEventListener("input", e => {
 //*********************Tag search **************************/
 
 //Update ingredients list by tags
-function updateIngredientsByTags(ingredientSearchUserinput) {
+function updateIngredientsByTags(userSearch) {
+
+   let ingredientsTemp = [];
+   for (let i = 0; i < globalFilter().length; i++) {
+      for (let j = 0; j < globalFilter()[i].ingredients.length; j++) {
+         ingredientsTemp.push(globalFilter()[i].ingredients[j].ingredient);
+      }
+   }
+
    //Create new filtered by tag ingredient array
-   let tagFilteredIngredients = ingredients.filter(ingredient => normalize(ingredient).includes(ingredientSearchUserinput));
+   let tagFilteredIngredients = ingredientsTemp.filter(ingredient => normalize(ingredient).includes(userSearch));
    tagFilteredIngredients = tagFilteredIngredients.map(ingredient => titleCase(ingredient));
    tagFilteredIngredients = Array.from(new Set(tagFilteredIngredients));
 
@@ -370,11 +370,12 @@ function updateIngredientsByTags(ingredientSearchUserinput) {
 //Ingredient search bar event
 const ingredientSearchInput = document.querySelector(".ingredient-search-bar");
 let ingredientSearchUserInput;
+
 ingredientSearchInput.addEventListener("input", e => {
    ingredientSearchUserInput = normalize(e.target.value);
    updateIngredientsByTags(ingredientSearchUserInput);
    //Re-Initialise ingredient list when search input empty
-   if (ingredientSearchUserInput.length == 0) {
+   if (ingredientSearchUserInput.length == 0 && mainSearchFilter.length === 0 && ingredientsFilter.length === 0 && appliancesFilter.length === 0 && ustensilsFilter.length === 0) {
       if (document.querySelector(".ingredients-list")) {
          document.querySelector(".ingredients-list").remove();
       }
@@ -385,8 +386,11 @@ ingredientSearchInput.addEventListener("input", e => {
 //Update appliances list by tags
 function updateAppliancesByTags(applianceSearchUserinput) {
 
+let appliancesTemp = globalFilter().map(recipe => recipe.appliance);
+appliancesTemp = Array.from(new Set(appliances));
+
    //Create new filtered by tag appliance array
-   let tagFilteredAppliances = appliances.filter(appliance => normalize(appliance).includes(applianceSearchUserinput));
+   let tagFilteredAppliances = appliancesTemp.filter(appliance => normalize(appliance).includes(applianceSearchUserinput));
    tagFilteredAppliances = Array.from(new Set(tagFilteredAppliances));
 
    //Initialise appliance list filtered by tag
@@ -400,11 +404,12 @@ function updateAppliancesByTags(applianceSearchUserinput) {
 //Appliance search bar event
 const applianceSearchInput = document.querySelector(".appliance-search-bar");
 let applianceSearchUserInput;
+
 applianceSearchInput.addEventListener("input", e => {
    applianceSearchUserInput = normalize(e.target.value);
    updateAppliancesByTags(applianceSearchUserInput);
    //Re-Initialise appliance list when search input empty
-   if (applianceSearchUserInput.length == 0) {
+   if (applianceSearchUserInput.length == 0 && mainSearchFilter.length === 0 && ingredientsFilter.length === 0 && appliancesFilter.length === 0 && ustensilsFilter.length === 0) {
       if (document.querySelector(".appliances-list")) {
          document.querySelector(".appliances-list").remove();
       }
@@ -415,7 +420,14 @@ applianceSearchInput.addEventListener("input", e => {
 //Update ustensil list by tags
 function updateUstensilsByTags(ustensilsSearchUserinput) {
    //Create new filtered by tag ingredient array
-   let tagFilteredUstensils = ustensils.filter(ustensil => normalize(ustensil).includes(ustensilsSearchUserinput));
+   let ustensilsTemp = [];
+   for (let i = 0; i < globalFilter().length; i++) {
+      for (let j = 0; j < globalFilter()[i].ustensils.length; j++) {
+         ustensilsTemp.push(globalFilter()[i].ustensils[j]);
+      }
+   }
+
+   let tagFilteredUstensils = ustensilsTemp.filter(ustensil => normalize(ustensil).includes(ustensilsSearchUserinput));
    tagFilteredUstensils = tagFilteredUstensils.map(ustensil => normalizeDOMString(ustensil));
    tagFilteredUstensils = Array.from(new Set(tagFilteredUstensils));
 
@@ -430,11 +442,12 @@ function updateUstensilsByTags(ustensilsSearchUserinput) {
 //Ustensils search bar
 const ustensilSearchInput = document.querySelector(".ustensil-search-bar");
 let ustensilsSearchUserInput;
+
 ustensilSearchInput.addEventListener("input", e => {
    ustensilsSearchUserInput = normalize(e.target.value);
    updateUstensilsByTags(ustensilsSearchUserInput);
    //Re-Initialise ustensil list when search input empty
-   if (ustensilsSearchUserInput.length == 0) {
+   if (ustensilsSearchUserInput.length == 0 && mainSearchFilter.length === 0 && ingredientsFilter.length === 0 && appliancesFilter.length === 0 && ustensilsFilter.length === 0) {
       if (document.querySelector(".ustensils-list")) {
          document.querySelector(".ustensils-list").remove();
       }
@@ -513,7 +526,7 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ingredient')) {
       let ingredientTagValue = normalize(e.target.textContent);
 
-      ingredientFilteredRecipes.push(ingredientTagValue);
+      ingredientsFilter.push(ingredientTagValue);
       updateRecipesByingredientTag(globalFilter(), ingredientTagValue);
 
       document.querySelector(".ingredient-search-bar").value = "";
@@ -542,13 +555,12 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-appliance')) {
       let applianceTagValue = normalize(e.target.textContent);
 
-      appliancesFilteredRecipes.push(applianceTagValue);
+      appliancesFilter.push(applianceTagValue);
       updateRecipesByApplianceTag(globalFilter(), applianceTagValue);
 
       document.querySelector(".appliance-search-bar").value = "";
    }
 })
-
 
 function updateRecipesByUstensilsTag(recipes, SelectedTagValue) {
 
@@ -578,7 +590,7 @@ document.addEventListener("click", (e) => {
    if (e.target.getAttribute('data-ustensil')) {
       let ustensilTagValue = normalize(e.target.textContent);
 
-      ustensilsFilteredRecipes.push(ustensilTagValue);
+      ustensilsFilter.push(ustensilTagValue);
       updateRecipesByUstensilsTag(globalFilter(), ustensilTagValue);
 
       document.querySelector(".ustensil-search-bar").value = "";
