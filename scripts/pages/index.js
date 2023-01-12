@@ -317,30 +317,6 @@ function mainSearchAlgo(recipesArray, userInput) {
    return Array.from(new Set(mainSearchArray));
 }
 
-// //Main search native loop algorithm ************** 
-// function mainSearchAlgo(recipesArray, userInput) {
-//    const mainSearchArray = [];
-//    for (let i = 0; i < recipesArray.length; i++) {
-//       //Check if search input matches title + add
-//       if (normalize(recipesArray[i].name).includes(userInput)) {
-//          mainSearchArray.push(recipesArray[i]);    
-//       }
-//       //Check if search input matches description + add
-//       if (normalize(recipesArray[i].description).includes(userInput)) {
-//          mainSearchArray.push(recipesArray[i]);
-//       }
-//       //Check if search input matches ingredients + add
-//       for (let j = 0; j < recipesArray[i].ingredients.length; j++) {
-//          if (normalize(recipesArray[i].ingredients[j].ingredient).includes(userInput)) {
-//             mainSearchArray.push(recipesArray[i]);
-//          }
-//       }
-//    }
-//    //Removes duplicates and return array
-//    return Array.from(new Set(mainSearchArray));
-// }
-
-
 //Main search initialisation
 function mainSearch(mainSearchUserinput) {
    if (mainSearchUserinput.length > 2) {
