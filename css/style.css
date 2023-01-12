@@ -166,6 +166,7 @@ cursor: pointer;
     padding-left: 18px;
     width: 100%;
     font-weight: 700;
+    min-width: 300px;
 }
 
 .ingredient-search-bar {

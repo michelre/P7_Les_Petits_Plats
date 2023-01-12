@@ -69,10 +69,19 @@ function toggleIngredients() {
    if (ingredientsDropdown.style.display == "none") {
       ingredientsDropdown.style.display = "block";
       ingredientsButton.style.display = "none";
+
+      if (appliancesDropdown.style.display === "block" || ustensilsDropdown.style.display === "block" && window.innerWidth > 992) {
+         document.querySelectorAll(".tag-list").forEach(tagList => tagList.style.gridTemplateColumns = "1fr");
+      }
+
    } else {
       ingredientsDropdown.style.display = "none";
       ingredientsButton.style.display = "block";
+      if (window.innerWidth > 992) {
+         document.querySelectorAll(".tag-list").forEach(tagList => tagList.style.gridTemplateColumns = "1fr 1fr 0.5fr");
+      }
    }
+
 }
 
 ingredientsButton.addEventListener("click", toggleIngredients);
@@ -96,9 +105,18 @@ function toggleAppliances() {
    if (appliancesDropdown.style.display == "none") {
       appliancesDropdown.style.display = "block";
       appliancesButton.style.display = "none";
+
+      if (ingredientsDropdown.style.display === "block" || ustensilsDropdown.style.display === "block" && window.innerWidth > 992) {
+         document.querySelectorAll(".tag-list").forEach(tagList => tagList.style.gridTemplateColumns = "1fr");
+      }
+
    } else {
       appliancesDropdown.style.display = "none";
       appliancesButton.style.display = "block";
+
+      if (window.innerWidth > 992 && ingredientsDropdown.style.display === "none") {
+         document.querySelectorAll(".tag-list").forEach(tagList => tagList.style.gridTemplateColumns = "1fr 1fr 0.5fr");
+      }
    }
 }
 
@@ -122,14 +140,22 @@ async function initUstensilList() {
 
 initUstensilList();
 
-//Appliances Dropdown open/close
+//Ustensils Dropdown open/close
 function toggleUstensils() {
    if (ustensilsDropdown.style.display == "none") {
       ustensilsDropdown.style.display = "block";
       ustensilsButton.style.display = "none";
+
+      if (ingredientsDropdown.style.display === "block" || appliancesDropdown.style.display === "block" && window.innerWidth > 992) {
+         document.querySelectorAll(".tag-list").forEach(tagList => tagList.style.gridTemplateColumns = "1fr");
+      }
+
    } else {
       ustensilsDropdown.style.display = "none";
       ustensilsButton.style.display = "block";
+      if (window.innerWidth > 992 && ingredientsDropdown.style.display === "none") {
+         document.querySelectorAll(".tag-list").forEach(tagList => tagList.style.gridTemplateColumns = "1fr 1fr 0.5fr");
+      }
    }
 }
 
